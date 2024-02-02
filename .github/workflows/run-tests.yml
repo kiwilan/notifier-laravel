@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
         php: [8.3, 8.2, 8.1]
         laravel: [10.*]
         stability: [prefer-stable]
@@ -38,8 +38,10 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
           coverage: pcov
 
-      - name: Setup MailHog
-        uses: mailhog/mailhog-action@v1.0.0
+      - name: Setup mailpit
+        run: /
+          sudo bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
+          mailpit
 
       - name: Setup problem matchers
         run: |
