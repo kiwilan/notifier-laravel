@@ -38,12 +38,10 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
           coverage: pcov
 
-      - uses: JarvusInnovations/background-action@v1
-        name: Setup mailpit
-        with:
-          run: |
-            sudo bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
-            mailpit
+      - name: Setup mailpit
+        run: |
+          sudo bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
+          mailpit
 
       - name: Setup problem matchers
         run: |

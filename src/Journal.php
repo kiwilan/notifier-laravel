@@ -110,7 +110,7 @@ class Journal
     public function notifier(string $type): self
     {
         $this->notifier = match ($type) {
-            'mail' => Notifier::mail()->auto(),
+            'mail' => Notifier::mail(),
             'slack' => Notifier::slack(config('steward.slack.webhook')),
             'discord' => Notifier::discord(config('steward.discord.webhook')),
             default => null,
