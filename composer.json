@@ -1,11 +1,14 @@
 {
     "name": "kiwilan/notifier-laravel",
-    "description": "This is my package notifier-laravel",
+    "description": "Notifier for Laravel is a package to add some useful classes to send notifications and logging.",
     "version": "0.1.0",
     "keywords": [
-        "Kiwilan",
         "laravel",
-        "notifier-laravel"
+        "notifier",
+        "slack",
+        "mail",
+        "discord",
+        "logging"
     ],
     "homepage": "https://github.com/kiwilan/notifier-laravel",
     "license": "MIT",
