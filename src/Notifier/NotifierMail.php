@@ -155,6 +155,10 @@ class NotifierMail extends Notifier implements INotifier
             $this->to = [new Address(config('notifier.mail.to.address'), config('notifier.mail.to.name'))];
         }
 
+        if (! $this->subject) {
+            $this->subject = config('notifier.mail.subject');
+        }
+
         if (! $this->html) {
             $this->html = $this->message;
         }

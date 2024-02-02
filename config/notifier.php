@@ -2,17 +2,25 @@
 
 return [
     'discord' => [
+        // Default Discord webhook URL.
         'webhook' => env('NOTIFIER_DISCORD_WEBHOOK', null),
+        // Default Discord username.
         'username' => env('NOTIFIER_DISCORD_USERNAME', null),
+        // Default Discord avatar URL.
         'avatar_url' => env('NOTIFIER_DISCORD_AVATAR_URL', null),
     ],
 
     'slack' => [
+        // Default Slack webhook URL.
         'webhook' => env('NOTIFIER_SLACK_WEBHOOK', null),
     ],
 
     'mail' => [
+        // Use Laravel mailer instead package from `.env` file.
         'laravel_override' => env('NOTIFIER_MAIL_LARAVEL_OVERRIDE', false),
+        // Set default subject for mail.
+        'subject' => env('NOTIFIER_MAIL_SUBJECT', 'Notifier'),
+        // Set default mailer from `.env` file.
         'mailer' => env('NOTIFIER_MAIL_MAILER', 'smtp'),
         'host' => env('NOTIFIER_MAIL_HOST', 'mailpit'),
         'port' => env('NOTIFIER_MAIL_PORT', 1025),

@@ -49,3 +49,21 @@ function dotenv(): array
 
     return $dotenv;
 }
+
+function getLog(): string
+{
+    $os = PHP_OS;
+    $cmd = match ($os) {
+        'Windows' => 'php --info | findstr /r /c:"error_log"',
+        default => 'php --info | grep error',
+    };
+
+    // dump($cmd);
+    $output = exec($cmd);
+    $log_path_regex = '/error_log => (.*)/';
+    preg_match($log_path_regex, $output, $matches);
+    dump($matches);
+    // dump($output);
+
+    return $matches[1];
+}

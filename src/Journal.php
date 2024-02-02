@@ -10,7 +10,7 @@ use Kiwilan\Notifier\Notifier\INotifier;
 
 class Journal
 {
-    protected function __construct(
+    public function __construct(
         protected ?string $message = null,
         protected string $level = 'info',
         protected array $data = [],
@@ -62,6 +62,8 @@ class Journal
     private function log(): void
     {
         Log::log($this->level, $this->message, $this->data);
+        $data = json_encode($this->data, JSON_PRETTY_PRINT);
+        error_log("Journal: {$this->level} - {$this->message} - {$data}");
     }
 
     /**
