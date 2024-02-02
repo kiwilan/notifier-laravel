@@ -37,13 +37,30 @@ it('can use discord', function () {
 
 it('can use slack', function () {
     $notifier = Notifier::slack()->message('Hello, Slack!');
+
     expect($notifier->send())->toBeTrue();
 });
 
 it('can use mail', function () {
     $notifier = Notifier::mail()
         ->subject('Hello, Mail!')
+        ->message('Hello, Mail!')
+        ->mailer(config('notifier.mail.mailer'))
+        ->host(config('notifier.mail.host'))
+        ->port(config('notifier.mail.port'))
+        ->credentials(config('notifier.mail.username'), config('notifier.mail.password'))
+        ->encryption(config('notifier.mail.encryption'))
+        ->from(config('notifier.mail.from.address'), config('notifier.mail.from.name'))
+        ->to(config('notifier.mail.to.address'), config('notifier.mail.to.name'));
+
+    expect($notifier->send())->toBeTrue();
+});
+
+it('can use custom mail', function () {
+    $notifier = Notifier::mail()
+        ->subject('Hello, Mail!')
         ->message('Hello, Mail!');
+
     expect($notifier->send())->toBeTrue();
 });
 
