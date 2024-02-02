@@ -39,7 +39,7 @@ jobs:
           coverage: pcov
 
       - name: Setup mailpit
-        run: /
+        run: |
           sudo bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
           mailpit
 
