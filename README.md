@@ -1,4 +1,6 @@
-# notifier-laravel
+# **Notifier for Laravel**
+
+![Banner with steward picture in background and Steward for Laravel title](https://raw.githubusercontent.com/kiwilan/steward-laravel/main/docs/banner.jpg)
 
 [![php][php-version-src]][php-version-href]
 [![laravel][laravel-src]][laravel-href]
@@ -10,6 +12,11 @@
 [![codecov][codecov-src]][codecov-href]
 
 Notifier for Laravel is a package to add some useful classes to send notifications and logging.
+
+Works for [Discord webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks), [Slack webhooks](https://api.slack.com/messaging/webhooks) and emails with [symfony/mailer](https://symfony.com/doc/current/mailer.html).
+
+> [!NOTE]
+> This package is an alternative to [Laravel Notifications](https://laravel.com/docs/10.x/notifications).
 
 ## Installation
 
