@@ -9,7 +9,6 @@ beforeEach(function () {
 });
 
 it('can use instance', function () {
-
     $facade = Journal::info('Hello, Journal!');
     $instance = (new NotifierJournal())->info('Hello, Journal!');
 
@@ -18,8 +17,8 @@ it('can use instance', function () {
 });
 
 it('can use different levels', function () {
-    $debug = Journal::debug('debug');
-    $info = Journal::info('info');
+    $debug = Journal::debug('debug', 'data');
+    $info = Journal::info('info', ['data']);
     $warning = Journal::warning('warning');
     $error = Journal::error('error');
 

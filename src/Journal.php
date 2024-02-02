@@ -10,32 +10,49 @@ use Kiwilan\Notifier\Notifier\INotifier;
 
 class Journal
 {
+    /**
+     * @param  string[]|string  $data  Additional data to log.
+     */
     public function __construct(
         protected ?string $message = null,
         protected string $level = 'info',
-        protected array $data = [],
+        protected array|string $data = [],
         protected ?INotifier $notifier = null,
     ) {
+        if (is_string($data)) {
+            $this->data = [$data];
+        }
         $this->log();
     }
 
-    public function info(string $message, array $data = []): self
+    /**
+     * @param  string[]|string  $data  Additional data to log.
+     */
+    public function info(string $message, array|string $data = []): self
     {
-
         return new self($message, 'info', $data);
     }
 
-    public function debug(string $message, array $data = []): self
+    /**
+     * @param  string[]|string  $data  Additional data to log.
+     */
+    public function debug(string $message, array|string $data = []): self
     {
         return new self($message, 'debug', $data);
     }
 
-    public function warning(string $message, array $data = []): self
+    /**
+     * @param  string[]|string  $data  Additional data to log.
+     */
+    public function warning(string $message, array|string $data = []): self
     {
         return new self($message, 'warning', $data);
     }
 
-    public function error(string $message, array $data = []): self
+    /**
+     * @param  string[]|string  $data  Additional data to log.
+     */
+    public function error(string $message, array|string $data = []): self
     {
         return new self($message, 'error', $data);
     }
