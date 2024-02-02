@@ -12,7 +12,7 @@ use Kiwilan\Notifier\Notifier\NotifierSlack;
  */
 class Notifier
 {
-    protected function __construct(
+    public function __construct(
         protected string $type = 'unknown',
     ) {
     }
@@ -35,10 +35,16 @@ class Notifier
      *
      * @see https://api.slack.com/messaging/webhooks
      */
-    public static function slack(string $webhook): NotifierSlack
+    public static function slack(?string $webhook = null): NotifierSlack
     {
         $self = new self();
         $self->type = 'slack';
+
+        if (! $webhook) {
+            $webhook = config('notifier.slack.webhook');
+        }
+
+        $self->checkWebhook($webhook);
 
         return NotifierSlack::make($webhook);
     }
@@ -50,10 +56,16 @@ class Notifier
      *
      * @see https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
      */
-    public static function discord(string $webhook): NotifierDiscord
+    public static function discord(?string $webhook = null): NotifierDiscord
     {
         $self = new self();
         $self->type = 'discord';
+
+        if (! $webhook) {
+            $webhook = config('notifier.discord.webhook');
+        }
+
+        $self->checkWebhook($webhook);
 
         return NotifierDiscord::make($webhook);
     }
@@ -65,9 +77,9 @@ class Notifier
         }
     }
 
-    protected function logError(string $reason): void
+    protected function logError(string $reason, array $data = []): void
     {
-        Log::error("Notifier: notification failed: {$reason}");
+        Log::error("Notifier: notification failed: {$reason}", $data);
     }
 
     protected function logSent(): void
@@ -77,28 +89,70 @@ class Notifier
         }
     }
 
-    /**
-     * @param  string|string[]  $array
-     */
-    protected function arrayToString(array|string $array): string
+    protected function checkWebhook(?string $webhook = null): void
     {
-        return implode(PHP_EOL, $array);
+        if (! $webhook) {
+            throw new \InvalidArgumentException("Notifier: {$this->type} webhook URL is required");
+        }
     }
 
+    /**
+     * @param  string|string[]  $message
+     */
+    protected function arrayToString(array|string $message): string
+    {
+        if (is_string($message)) {
+            return $message;
+        }
+
+        return implode(PHP_EOL, $message);
+    }
+
+    /**
+     * Send HTTP request.
+     *
+     * @param  string  $url  URL to send request to
+     * @param  array  $body  Request body
+     * @param  array  $headers  Request headers
+     * @return array{status_code: int, body: string}
+     */
     protected function sendRequest(
         string $url,
-        array $headers = [
-            'Accept' => 'application/json',
-        ],
-        array $bodyJson = [],
-    ): \Psr\Http\Message\ResponseInterface {
-        $client = new \GuzzleHttp\Client();
-        $response = $client->request('POST', $url, [
-            'headers' => $headers,
-            'json' => $bodyJson,
-            'http_errors' => false,
-        ]);
+        array $body = [],
+        array $headers = [],
+        bool $json = true,
+    ): array {
+        $headers = [
+            ...$headers,
+            $json ? 'Content-type: application/json' : 'Content-type: application/x-www-form-urlencoded',
+        ];
 
-        return $response;
+        $opts = [
+            'http' => [
+                'method' => 'POST',
+                'header' => $headers,
+                'content' => $json ? json_encode($body) : http_build_query($body),
+            ],
+        ];
+
+        $context = stream_context_create($opts);
+        $response = file_get_contents($url, false, $context);
+
+        if ($response === false) {
+            return [
+                'status_code' => 500,
+                'body' => "Failed to send request to {$url}",
+            ];
+        }
+
+        $httpCode = $http_response_header[0];
+        $statusCode = explode(' ', $httpCode)[1];
+        $httpCode = (int) $statusCode;
+        $body = $response;
+
+        return [
+            'status_code' => $httpCode,
+            'body' => $body,
+        ];
     }
 }

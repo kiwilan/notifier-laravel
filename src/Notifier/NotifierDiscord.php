@@ -11,6 +11,7 @@ class NotifierDiscord extends Notifier implements INotifier
         protected ?string $message = null,
         protected ?string $username = null,
         protected ?string $avatarUrl = null,
+        protected array $body = [],
     ) {
     }
 
@@ -46,24 +47,38 @@ class NotifierDiscord extends Notifier implements INotifier
         return $this;
     }
 
-    public function send(): bool
+    private function createBody(): self
     {
-        $body = [
+        $this->body = [
             'content' => $this->message ?? '',
         ];
 
         if ($this->username) {
-            $body['username'] = $this->username;
+            $this->body['username'] = $this->username;
         }
 
         if ($this->avatarUrl) {
-            $body['avatar_url'] = $this->avatarUrl;
+            $this->body['avatar_url'] = $this->avatarUrl;
         }
 
-        $res = $this->sendRequest($this->webhook, bodyJson: $body);
+        if (config('notifier.discord.username') && ! $this->username) {
+            $this->body['username'] = config('notifier.discord.username');
+        }
 
-        if ($res->getStatusCode() !== 204) {
-            $this->logError("status code {$res->getStatusCode()}, {$res->getBody()->getContents()}");
+        if (config('notifier.discord.avatar_url') && ! $this->avatarUrl) {
+            $this->body['avatar_url'] = config('notifier.discord.avatar_url');
+        }
+
+        return $this;
+    }
+
+    public function send(): bool
+    {
+        $this->createBody();
+        $res = $this->sendRequest($this->webhook, $this->body);
+
+        if ($res['status_code'] !== 204) {
+            $this->logError("status code {$res['status_code']}, {$res['body']}");
 
             return false;
         }

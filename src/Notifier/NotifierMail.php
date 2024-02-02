@@ -15,10 +15,10 @@ class NotifierMail extends Notifier implements INotifier
      * @param  Address[]  $to  Array of `Address` object
      */
     protected function __construct(
-        protected string $mailer = 'smtp',
-        protected string $host = 'mailpit',
-        protected int $port = 1025,
-        protected string $encryption = 'tls',
+        protected ?string $mailer = null,
+        protected ?string $host = null,
+        protected ?int $port = null,
+        protected ?string $encryption = null,
         protected ?string $username = null,
         protected ?string $password = null,
         protected ?TransportInterface $mailTransport = null,
@@ -89,15 +89,43 @@ class NotifierMail extends Notifier implements INotifier
     /**
      * Use default mailer from `.env` file.
      */
-    public function auto(): self
+    private function auto(): self
     {
-        $this->mailer = config('mail.mailer');
-        $this->host = config('mail.host');
-        $this->port = config('mail.port');
-        $this->encryption = config('mail.encryption');
-        $this->username = config('mail.username');
-        $this->password = config('mail.password');
-        $this->from = new Address(config('mail.from.address'), config('mail.from.name'));
+        if (! $this->mailer) {
+            $this->mailer = config('notifier.mail.mailer');
+        }
+
+        if (! $this->host) {
+            $this->host = config('notifier.mail.host');
+        }
+
+        if (! $this->port) {
+            $this->port = config('notifier.mail.port');
+        }
+
+        if (! $this->encryption) {
+            $this->encryption = config('notifier.mail.encryption');
+        }
+
+        if (! $this->username) {
+            $this->username = config('notifier.mail.username');
+        }
+
+        if (! $this->password) {
+            $this->password = config('notifier.mail.password');
+        }
+
+        if (! $this->from) {
+            $this->from = new Address(config('notifier.mail.from.address'), config('notifier.mail.from.name'));
+        }
+
+        if (count($this->to) === 0) {
+            $this->to = [new Address(config('notifier.mail.to.address'), config('notifier.mail.to.name'))];
+        }
+
+        if (! $this->html) {
+            $this->html = $this->message;
+        }
 
         return $this;
     }
@@ -157,6 +185,7 @@ class NotifierMail extends Notifier implements INotifier
 
     public function send(): bool
     {
+        $this->auto();
         $this->mailTransport = Transport::fromDsn("{$this->mailer}://{$this->host}:{$this->port}");
         $this->mailMailer = new Mailer($this->mailTransport);
 
@@ -186,10 +215,13 @@ class NotifierMail extends Notifier implements INotifier
             $this->mailEmail->html($this->message);
         }
 
+        dump($this);
+
         try {
             $this->mailMailer->send($this->mailEmail);
         } catch (\Throwable $th) {
-            $this->logError($th->getMessage());
+            dump($th->getMessage());
+            $this->logError($th->getMessage(), $this->toArray());
 
             return false;
         }
