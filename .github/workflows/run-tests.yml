@@ -40,8 +40,12 @@ jobs:
 
       - name: Setup mailpit
         run: |
-          sudo bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
-          mailpit
+          docker run -d \
+          --restart unless-stopped \
+          --name=mailpit \
+          -p 8025:8025 \
+          -p 1025:1025 \
+          axllent/mailpit
 
       - name: Setup problem matchers
         run: |
