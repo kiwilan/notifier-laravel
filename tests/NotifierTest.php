@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Kiwilan\Notifier\Facades\Notifier;
+use Kiwilan\Notifier\Notifier as NotifierNotifier;
 
 beforeEach(function () {
     Config::set('notifier.discord.webhook', dotenv()['NOTIFIER_DISCORD_WEBHOOK']);
@@ -19,6 +20,14 @@ beforeEach(function () {
     Config::set('notifier.mail.from.name', dotenv()['NOTIFIER_MAIL_FROM_NAME']);
     Config::set('notifier.mail.to.address', dotenv()['NOTIFIER_MAIL_TO_ADDRESS']);
     Config::set('notifier.mail.to.name', dotenv()['NOTIFIER_MAIL_TO_NAME']);
+});
+
+it('can use instance', function () {
+    $facade = Notifier::discord();
+    $instance = (new NotifierNotifier())->discord();
+
+    expect($facade)->toEqual($instance);
+    expect($facade)->toBeInstanceOf(NotifierNotifier::class);
 });
 
 it('can use discord', function () {

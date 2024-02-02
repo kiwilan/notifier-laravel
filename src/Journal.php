@@ -14,7 +14,6 @@ class Journal
         protected ?string $message = null,
         protected string $level = 'info',
         protected array $data = [],
-        protected ?Collection $users = null,
         protected ?INotifier $notifier = null,
     ) {
         $this->log();
@@ -100,7 +99,7 @@ class Journal
         }
 
         try {
-            $filamentUsers = $this->users;
+            $filamentUsers = $users;
 
             $recipients_id = config('notifier.to_database.recipients_id');
             if (! $filamentUsers) {
@@ -140,5 +139,14 @@ class Journal
             ->send();
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'message' => $this->message,
+            'level' => $this->level,
+            'data' => $this->data,
+        ];
     }
 }
