@@ -31,6 +31,8 @@ it('can use slack', function () {
 });
 
 it('can use mail', function () {
-    $notifier = Notifier::mail()->message('Hello, Mail!');
+    $notifier = Notifier::mail()
+        ->subject('Hello, Mail!')
+        ->message('Hello, Mail!');
     expect($notifier->send())->toBeTrue();
 });
