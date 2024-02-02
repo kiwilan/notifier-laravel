@@ -45,18 +45,31 @@ class Journal
      * Handle exception, log as error and send notification to database.
      *
      * In `local` environment, it will return null, to not send notification to database.
+     *
+     * @param  bool  $toDatabase  Send notification to database with `filament/notifications` package.
+     * @param  string|null  $notifier  Send notification to email, Slack or Discord, use `mail`, `slack` or `discord`.
      */
-    public function handler(\Throwable $e): ?self
+    public function handler(\Throwable $e, bool $toDatabase = false, ?string $notifier = null): ?self
     {
         if (config('app.env') === 'local') {
             return null;
         }
 
-        return new self($e->getMessage(), 'error', [
+        $self = new self($e->getMessage(), 'error', [
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => $e->getTraceAsString(),
         ]);
+
+        if ($toDatabase) {
+            $self->toDatabase();
+        }
+
+        if ($notifier) {
+            $self->notifier($notifier);
+        }
+
+        return $self;
     }
 
     private function log(): void
@@ -113,12 +126,12 @@ class Journal
     {
         $this->notifier = match ($type) {
             'mail' => Notifier::mail(),
-            'slack' => Notifier::slack(config('steward.slack.webhook')),
-            'discord' => Notifier::discord(config('steward.discord.webhook')),
+            'slack' => Notifier::slack(),
+            'discord' => Notifier::discord(),
             default => null,
         };
 
-        $this->notifier->message($this->message)
+        $this->notifier->message([$this->message, json_encode($this->data, JSON_PRETTY_PRINT)])
             ->send();
 
         return $this;

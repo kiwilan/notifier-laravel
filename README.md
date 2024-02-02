@@ -69,7 +69,32 @@ Journal is a utility class for [Laravel Logging](https://laravel.com/docs/10.x/l
 ```php
 use Kiwilan\Notifier\Facades\Journal;
 
+Journal::debug('Hello, Journal!');
 Journal::info('Hello, Journal!');
+Journal::warning('Hello, Journal!');
+Journal::error('Hello, Journal!');
+```
+
+#### Handler
+
+```php
+<?php
+
+namespace App\Exceptions;
+
+use Kiwilan\Notifier\Facades\Journal;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
+
+class Handler extends ExceptionHandler
+{
+  public function register(): void
+  {
+    $this->reportable(function (Throwable $e) {
+      Journal::handler($e, toDatabase: true, notifier: 'mail');
+    });
+  }
+}
 ```
 
 ### Notifier
