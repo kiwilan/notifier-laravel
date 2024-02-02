@@ -97,8 +97,6 @@ You can use `NOTIFIER_MAIL_LARAVEL_OVERRIDE` to use Laravel mailer instead of pa
 use Kiwilan\Notifier\Facades\Notifier;
 
 $notifier = Notifier::mail()
-  ->from('hello@example.com', 'Hello')
-  ->to('to@example.com', 'To')
   ->subject('Hello, Mail!')
   ->message('Hello, Mail!');
 
