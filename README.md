@@ -15,9 +15,6 @@ Notifier for Laravel is a package to add some useful classes to send notificatio
 
 Works for [Discord webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks), [Slack webhooks](https://api.slack.com/messaging/webhooks) and emails with [symfony/mailer](https://symfony.com/doc/current/mailer.html).
 
-> [!NOTE]
-> This package is an alternative to [Laravel Notifications](https://laravel.com/docs/10.x/notifications).
-
 ## Installation
 
 You can install the package via composer:
@@ -76,6 +73,8 @@ Journal::info('Hello, Journal!');
 ```
 
 ### Notifier
+
+Notifier is an alternative to [Laravel Notifications](https://laravel.com/docs/10.x/notifications).
 
 #### Discord
 
