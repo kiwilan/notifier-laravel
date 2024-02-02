@@ -118,8 +118,8 @@ Journal::info('Hello, Journal!')
 
 You can use Journal as a handler for [Laravel Exceptions](https://laravel.com/docs/10.x/errors).
 
--   `toDatabase` is a boolean to log the exception in the database with `filament/notifications` package (you have to install it).
--   `toNotifier` is a string to send a notification with `discord`, `mail` or `slack` (you have to set the config file).
+-   `toDatabase()` is a boolean to log the exception in the database with `filament/notifications` package (you have to install it).
+-   `toNotifier()` is a string to send a notification with `discord`, `mail` or `slack` (you have to set the config file).
 
 ```php
 <?php
@@ -174,7 +174,7 @@ $notifier = Notifier::discord('https://discord.com/api/webhooks/1234567890/ABCDE
 
 #### Mail
 
-Default mailer, host, port, username, password, encryption, from address, from name, to address and to name can be set in the config file.
+Default `mailer`, `host`, `port`, `username`, `password`, `encryption`, `from address`, `from name`, `to address` and `to name` can be set in the config file.
 
 You can use `NOTIFIER_MAIL_LARAVEL_OVERRIDE` to use Laravel mailer instead of package mailer.
 
