@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Kiwilan\Notifier\Facades\Notifier;
 
@@ -35,4 +36,27 @@ it('can use mail', function () {
         ->subject('Hello, Mail!')
         ->message('Hello, Mail!');
     expect($notifier->send())->toBeTrue();
+});
+
+it('can use command', function () {
+    $success = Artisan::call('notifier', [
+        'message' => 'Hello, Mail!',
+        '--type' => 'mail',
+    ]);
+
+    expect($success)->toBe(0);
+
+    $success = Artisan::call('notifier', [
+        'message' => 'Hello, Discord!',
+        '--type' => 'discord',
+    ]);
+
+    expect($success)->toBe(0);
+
+    $success = Artisan::call('notifier', [
+        'message' => 'Hello, Slack!',
+        '--type' => 'slack',
+    ]);
+
+    expect($success)->toBe(0);
 });

@@ -145,6 +145,10 @@ class Handler extends ExceptionHandler
 
 Notifier is an alternative to [Laravel Notifications](https://laravel.com/docs/10.x/notifications).
 
+> [!NOTE]
+> If `app.debug` is `true`, `debug` level logs will be written for sending and sent notifications.
+> In all cases, `error` level logs will be written for sending errors.
+
 #### Discord
 
 Default webhook URL, username and avatar URL can be set in the config file.
