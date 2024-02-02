@@ -118,8 +118,8 @@ Journal::info('Hello, Journal!')
 
 You can use Journal as a handler for [Laravel Exceptions](https://laravel.com/docs/10.x/errors).
 
--   `toDatabase()` is a boolean to log the exception in the database with `filament/notifications` package (you have to install it).
--   `toNotifier()` is a string to send a notification with `discord`, `mail` or `slack` (you have to set the config file).
+-   `toDatabase` is a boolean to log the exception in the database with `filament/notifications` package (you have to install it).
+-   `toNotifier` is a string to send a notification with `discord`, `mail` or `slack` (you have to set the config file).
 
 ```php
 <?php
