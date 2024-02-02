@@ -218,7 +218,6 @@ class NotifierMail extends Notifier implements INotifier
         try {
             $this->mailMailer->send($this->mailEmail);
         } catch (\Throwable $th) {
-            dump($th->getMessage());
             $this->logError($th->getMessage(), $this->toArray());
 
             return false;
