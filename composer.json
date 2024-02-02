@@ -1,6 +1,7 @@
 {
     "name": "kiwilan/notifier-laravel",
     "description": "This is my package notifier-laravel",
+    "version": "0.1.0",
     "keywords": [
         "Kiwilan",
         "laravel",
@@ -21,9 +22,10 @@
         "illuminate/contracts": "^10.0"
     },
     "require-dev": {
+        "filament/notifications": "^3.2",
+        "larastan/larastan": "^2.0.1",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^7.8",
-        "larastan/larastan": "^2.0.1",
         "orchestra/testbench": "^8.8",
         "pestphp/pest": "^2.20",
         "pestphp/pest-plugin-arch": "^2.0",

@@ -20,23 +20,23 @@ class Journal
         $this->log();
     }
 
-    public static function info(string $message, array $data = []): self
+    public function info(string $message, array $data = []): self
     {
 
         return new self($message, 'info', $data);
     }
 
-    public static function debug(string $message, array $data = []): self
+    public function debug(string $message, array $data = []): self
     {
         return new self($message, 'debug', $data);
     }
 
-    public static function warning(string $message, array $data = []): self
+    public function warning(string $message, array $data = []): self
     {
         return new self($message, 'warning', $data);
     }
 
-    public static function error(string $message, array $data = []): self
+    public function error(string $message, array $data = []): self
     {
         return new self($message, 'error', $data);
     }
@@ -46,7 +46,7 @@ class Journal
      *
      * In `local` environment, it will return null, to not send notification to database.
      */
-    public static function handler(\Throwable $e): ?self
+    public function handler(\Throwable $e): ?self
     {
         if (config('app.env') === 'local') {
             return null;

@@ -1,19 +1,6 @@
-# This is my package notifier-laravel
+# notifier-laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/kiwilan/notifier-laravel.svg?style=flat-square)](https://packagist.org/packages/kiwilan/notifier-laravel)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/kiwilan/notifier-laravel/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/kiwilan/notifier-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/kiwilan/notifier-laravel/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/kiwilan/notifier-laravel/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/kiwilan/notifier-laravel.svg?style=flat-square)](https://packagist.org/packages/kiwilan/notifier-laravel)
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/notifier-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/notifier-laravel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Notifier for Laravel is a package to add some useful classes to send notifications and logging.
 
 ## Installation
 
@@ -21,13 +8,6 @@ You can install the package via composer:
 
 ```bash
 composer require kiwilan/notifier-laravel
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="notifier-laravel-migrations"
-php artisan migrate
 ```
 
 You can publish the config file with:
@@ -41,12 +21,6 @@ This is the contents of the published config file:
 ```php
 return [
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="notifier-laravel-views"
 ```
 
 ## Usage
@@ -76,8 +50,8 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Ewilan Rivière](https://github.com/kiwilan)
-- [All Contributors](../../contributors)
+-   [Ewilan Rivière](https://github.com/ewilan-riviere)
+-   [All Contributors](../../contributors)
 
 ## License
 
