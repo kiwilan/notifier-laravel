@@ -64,7 +64,9 @@ return [
 
 ## Usage
 
-### Discord
+### Notifier
+
+#### Discord
 
 Default webhook URL, username and avatar URL can be set in the config file.
 
@@ -87,7 +89,7 @@ use Kiwilan\Notifier\Facades\Notifier;
 $notifier = Notifier::discord('https://discord.com/api/webhooks/1234567890/ABCDEFGHIJKLMN0123456789');
 ```
 
-### Mail
+#### Mail
 
 Default mailer, host, port, username, password, encryption, from address, from name, to address and to name can be set in the config file.
 
@@ -121,7 +123,7 @@ $notifier = Notifier::mail('smtp')
   ->encryption('tls');
 ```
 
-### Slack
+#### Slack
 
 Default webhook URL can be set in the config file.
 
