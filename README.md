@@ -63,9 +63,76 @@ return [
 
 ## Usage
 
+### Discord
+
 ```php
-$notifier = new Kiwilan\Notifier();
-echo $notifier->echoPhrase('Hello, Kiwilan!');
+use Kiwilan\Notifier\Facades\Notifier;
+
+$notifier = Notifier::discord()
+  ->username('Laravel')
+  ->avatarUrl('https://laravel.com/img/favicon/favicon-32x32.png')
+  ->message('Hello, Discord!');
+
+$notifier->send();
+```
+
+You can pass a custom webhook URL:
+
+```php
+use Kiwilan\Notifier\Facades\Notifier;
+
+$notifier = Notifier::discord('https://discord.com/api/webhooks/1234567890/ABCDEFGHIJKLMN0123456789');
+```
+
+### Mail
+
+```php
+use Kiwilan\Notifier\Facades\Notifier;
+
+$notifier = Notifier::mail()
+  ->from('hello@example.com', 'Hello')
+  ->to('to@example.com', 'To')
+  ->subject('Hello, Mail!')
+  ->message('Hello, Mail!');
+
+$notifier->send();
+```
+
+You can pass a custom mailer:
+
+```php
+use Kiwilan\Notifier\Facades\Notifier;
+
+$notifier = Notifier::mail('smtp')
+  ->from('hello@example.com', 'Hello')
+  ->to('to@example.com', 'To')
+  ->subject('Hello, Mail!')
+  ->message('Hello, Mail!')
+  ->mailer('smtp')
+  ->host('mailpit')
+  ->port(1025)
+  ->username(null)
+  ->password(null)
+  ->encryption('tls');
+```
+
+### Slack
+
+```php
+use Kiwilan\Notifier\Facades\Notifier;
+
+$notifier = Notifier::slack()
+  ->message('Hello, Slack!');
+
+$notifier->send();
+```
+
+You can pass a custom webhook URL:
+
+```php
+use Kiwilan\Notifier\Facades\Notifier;
+
+$notifier = Notifier::slack('https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX');
 ```
 
 ## Testing
