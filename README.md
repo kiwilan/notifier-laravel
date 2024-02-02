@@ -1,6 +1,6 @@
 # **Notifier for Laravel**
 
-![Banner with steward picture in background and Steward for Laravel title](https://raw.githubusercontent.com/kiwilan/steward-laravel/main/docs/banner.jpg)
+![Banner with british letter box picture in background and Notifier for Laravel title](https://raw.githubusercontent.com/kiwilan/notifier-laravel/main/docs/banner.jpg)
 
 [![php][php-version-src]][php-version-href]
 [![laravel][laravel-src]][laravel-href]
