@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \Kiwilan\Notifier\Journal debug(string $message, array $data = [])
  * @method static \Kiwilan\Notifier\Journal warning(string $message, array $data = [])
  * @method static \Kiwilan\Notifier\Journal error(string $message, array $data = [])
- * @method static \Kiwilan\Notifier\Journal handler(\Throwable $e)
+ * @method static \Kiwilan\Notifier\Journal handler(\Throwable $e, bool $toDatabase = false, ?string $toNotifier = null)
  */
 class Journal extends Facade
 {

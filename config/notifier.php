@@ -10,11 +10,6 @@ return [
         'avatar_url' => env('NOTIFIER_DISCORD_AVATAR_URL', null),
     ],
 
-    'slack' => [
-        // Default Slack webhook URL.
-        'webhook' => env('NOTIFIER_SLACK_WEBHOOK', null),
-    ],
-
     'mail' => [
         // Use Laravel mailer instead package from `.env` file.
         'laravel_override' => env('NOTIFIER_MAIL_LARAVEL_OVERRIDE', false),
@@ -31,5 +26,18 @@ return [
         'from_name' => env('NOTIFIER_MAIL_FROM_NAME', null),
         'to_address' => env('NOTIFIER_MAIL_TO_ADDRESS', null),
         'to_name' => env('NOTIFIER_MAIL_TO_NAME', null),
+    ],
+
+    'slack' => [
+        // Default Slack webhook URL.
+        'webhook' => env('NOTIFIER_SLACK_WEBHOOK', null),
+    ],
+
+    // This feature use `filament/notifications` package, not included in this package.
+    'to_database' => [
+        // Default user model for notification.
+        'model' => env('NOTIFIER_TO_DATABASE_MODEL', 'App\Models\User'),
+        // Recipients ID for notification.
+        'recipients_id' => explode(',', env('NOTIFIER_TO_DATABASE_RECIPIENTS_ID', ''), 0),
     ],
 ];

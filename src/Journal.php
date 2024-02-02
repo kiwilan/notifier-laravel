@@ -47,9 +47,9 @@ class Journal
      * In `local` environment, it will return null, to not send notification to database.
      *
      * @param  bool  $toDatabase  Send notification to database with `filament/notifications` package.
-     * @param  string|null  $notifier  Send notification to email, Slack or Discord, use `mail`, `slack` or `discord`.
+     * @param  string|null  $toNotifier  Send notification to email, Slack or Discord, use `mail`, `slack` or `discord`.
      */
-    public function handler(\Throwable $e, bool $toDatabase = false, ?string $notifier = null): ?self
+    public function handler(\Throwable $e, bool $toDatabase = false, ?string $toNotifier = null): ?self
     {
         if (config('app.env') === 'local') {
             return null;
@@ -65,8 +65,8 @@ class Journal
             $self->toDatabase();
         }
 
-        if ($notifier) {
-            $self->notifier($notifier);
+        if ($toNotifier) {
+            $self->toNotifier($toNotifier);
         }
 
         return $self;
@@ -82,7 +82,7 @@ class Journal
     /**
      * Send notification to database for Users with access to Filament admin panel with `filament/notifications` package.
      *
-     * @param  Model|Authenticatable|Collection|array|null  $users  To send notification to.
+     * @param  Model|Authenticatable|Collection|array|null  $users  To send notification to. Default use `notifier.to_database.recipients_id` from config.
      */
     public function toDatabase(Model|Authenticatable|Collection|array|null $users = null): self
     {
@@ -92,8 +92,9 @@ class Journal
             return $this;
         }
 
-        if (! class_exists('\App\Models\User')) {
-            Log::warning('Journal: Filament notifications is installed, but User model is not found, check https://filamentphp.com/docs/3.x/notifications/installation');
+        $model_class = config('notifier.to_database.model');
+        if (! class_exists('\\'.$model_class)) {
+            Log::warning("Journal: Filament notifications is installed, but {$model_class} model is not found, check https://filamentphp.com/docs/3.x/notifications/installation");
 
             return $this;
         }
@@ -101,9 +102,13 @@ class Journal
         try {
             $filamentUsers = $this->users;
 
+            $recipients_id = config('notifier.to_database.recipients_id');
             if (! $filamentUsers) {
-                $users = '\App\Models\User';
-                $filamentUsers = $users::all()->filter(fn ($user) => $user->canAccessPanel());
+                $filamentUsers = $model_class::query()->get();
+
+                if ($recipients_id) {
+                    $filamentUsers = $filamentUsers->filter(fn ($user) => in_array($user->id, $recipients_id));
+                }
             }
 
             \Filament\Notifications\Notification::make()
@@ -122,7 +127,7 @@ class Journal
      *
      * @param  string  $type  `mail`, `slack` or `discord`
      */
-    public function notifier(string $type): self
+    public function toNotifier(string $type): self
     {
         $this->notifier = match ($type) {
             'mail' => Notifier::mail(),
