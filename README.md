@@ -65,6 +65,16 @@ return [
 
 ## Usage
 
+### Journal
+
+Journal is a utility class for [Laravel Logging](https://laravel.com/docs/10.x/logging).
+
+```php
+use Kiwilan\Notifier\Facades\Journal;
+
+Journal::info('Hello, Journal!');
+```
+
 ### Notifier
 
 #### Discord
