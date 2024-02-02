@@ -11,7 +11,7 @@
 [![tests][tests-src]][tests-href]
 [![codecov][codecov-src]][codecov-href]
 
-Notifier for Laravel is a package to add some useful classes to send notifications and logging.
+Notifier for Laravel is a package to add some useful classes to send notifications (with `Notifier::class`) and logging (with `Journal::class`).
 
 Works for [Discord webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks), [Slack webhooks](https://api.slack.com/messaging/webhooks) and emails with [`symfony/mailer`](https://symfony.com/doc/current/mailer.html).
 
