@@ -91,6 +91,38 @@ class NotifierMail extends Notifier implements INotifier
      */
     private function auto(): self
     {
+        if (config('notifier.mail.laravel_override')) {
+            if (! $this->mailer) {
+                $this->mailer = config('mail.mailer');
+            }
+
+            if (! $this->host) {
+                $this->host = config('mail.host');
+            }
+
+            if (! $this->port) {
+                $this->port = config('mail.port');
+            }
+
+            if (! $this->encryption) {
+                $this->encryption = config('mail.encryption');
+            }
+
+            if (! $this->username) {
+                $this->username = config('mail.username');
+            }
+
+            if (! $this->password) {
+                $this->password = config('mail.password');
+            }
+
+            if (! $this->from) {
+                $this->from = new Address(config('mail.from.address'), config('mail.from.name'));
+            }
+
+            return $this;
+        }
+
         if (! $this->mailer) {
             $this->mailer = config('notifier.mail.mailer');
         }

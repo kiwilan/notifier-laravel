@@ -47,6 +47,7 @@ return [
   ],
 
   'mail' => [
+    'laravel_override' => env('NOTIFIER_MAIL_LARAVEL_OVERRIDE', false),
     'mailer' => env('NOTIFIER_MAIL_MAILER', 'smtp'),
     'host' => env('NOTIFIER_MAIL_HOST', 'mailpit'),
     'port' => env('NOTIFIER_MAIL_PORT', 1025),
@@ -64,6 +65,8 @@ return [
 ## Usage
 
 ### Discord
+
+Default webhook URL, username and avatar URL can be set in the config file.
 
 ```php
 use Kiwilan\Notifier\Facades\Notifier;
@@ -85,6 +88,10 @@ $notifier = Notifier::discord('https://discord.com/api/webhooks/1234567890/ABCDE
 ```
 
 ### Mail
+
+Default mailer, host, port, username, password, encryption, from address, from name, to address and to name can be set in the config file.
+
+You can use `NOTIFIER_MAIL_LARAVEL_OVERRIDE` to use Laravel mailer instead of package mailer.
 
 ```php
 use Kiwilan\Notifier\Facades\Notifier;
@@ -117,6 +124,8 @@ $notifier = Notifier::mail('smtp')
 ```
 
 ### Slack
+
+Default webhook URL can be set in the config file.
 
 ```php
 use Kiwilan\Notifier\Facades\Notifier;

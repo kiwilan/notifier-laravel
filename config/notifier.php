@@ -12,6 +12,7 @@ return [
     ],
 
     'mail' => [
+        'laravel_override' => env('NOTIFIER_MAIL_LARAVEL_OVERRIDE', false),
         'mailer' => env('NOTIFIER_MAIL_MAILER', 'smtp'),
         'host' => env('NOTIFIER_MAIL_HOST', 'mailpit'),
         'port' => env('NOTIFIER_MAIL_PORT', 1025),
