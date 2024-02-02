@@ -26,7 +26,7 @@ composer require kiwilan/notifier-laravel
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="notifier-laravel-config"
+php artisan vendor:publish --tag="notifier-config"
 ```
 
 This is the contents of the published config file:
