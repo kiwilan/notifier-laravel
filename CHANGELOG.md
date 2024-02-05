@@ -2,6 +2,10 @@
 
 All notable changes to `notifier-laravel` will be documented in this file.
 
+## v0.1.13 - 2024-02-05
+
+`NotifierCommand::class` fix `webhook` option.
+
 ## v0.1.12 - 2024-02-02
 
 Typo fix
