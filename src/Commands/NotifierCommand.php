@@ -48,35 +48,38 @@ class NotifierCommand extends Command
         $this->webhook = str_replace('=', '', $this->webhook);
 
         $this->info("Sending notification to {$this->type}...");
+        if ($this->webhook) {
+            $this->info("Webhook: {$this->webhook}");
+        }
+        $this->info("Message: {$this->message}");
+        $this->newLine();
+
+        if (! in_array($this->type, ['mail', 'slack', 'discord'])) {
+            $this->error('Type not found.');
+
+            return Command::FAILURE;
+        }
 
         if ($this->type === 'mail') {
             Notifier::mail()
                 ->message($this->message)
                 ->send();
-
-            return Command::SUCCESS;
         }
 
         if ($this->type === 'discord') {
-            $this->info("Webhook: {$this->webhook}");
             Notifier::discord($this->webhook)
                 ->message($this->message)
                 ->send();
-
-            return Command::SUCCESS;
         }
 
         if ($this->type === 'slack') {
-            $this->info("Webhook: {$this->webhook}");
             Notifier::slack($this->webhook)
                 ->message($this->message)
                 ->send();
-
-            return Command::SUCCESS;
         }
 
-        $this->error('Type not found.');
+        $this->info('Notification sent.');
 
-        return Command::FAILURE;
+        return Command::SUCCESS;
     }
 }
