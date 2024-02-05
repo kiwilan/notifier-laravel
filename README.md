@@ -227,6 +227,19 @@ use Kiwilan\Notifier\Facades\Notifier;
 $notifier = Notifier::slack('https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX');
 ```
 
+#### Command
+
+You can use Notifier as a command to send a notification with `discord`, `mail` or `slack`.
+
+Two options are available:
+
+-   `-t` or `--type` to set the type of notification, default is `mail`.
+-   `-w` or `--webhook` to set the webhook URL (only for `discord` and `slack`). If not set, the default webhook URL from the config file will be used.
+
+```bash
+php artisan notifier -t=discord -w=https://discord.com/api/webhooks/1234567890/ABCDEFGHIJKLMN0123456789 "Hello, Discord!"
+```
+
 ## Testing
 
 ```bash
