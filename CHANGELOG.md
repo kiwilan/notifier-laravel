@@ -2,6 +2,10 @@
 
 All notable changes to `notifier-laravel` will be documented in this file.
 
+## v0.1.15 - 2024-02-05
+
+`Notifier` add `urlencode()` to clean URL and try/catch on sending request to avoid error.
+
 ## v0.1.14 - 2024-02-05
 
 `NotifierCommand` hotfix.
