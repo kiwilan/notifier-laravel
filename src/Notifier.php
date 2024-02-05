@@ -123,7 +123,6 @@ class Notifier
         array $headers = [],
         bool $json = true,
     ): array {
-        $url = urlencode($url);
         $headers = [
             ...$headers,
             $json ? 'Content-type: application/json' : 'Content-type: application/x-www-form-urlencoded',

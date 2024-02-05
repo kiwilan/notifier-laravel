@@ -1,7 +1,7 @@
 {
     "name": "kiwilan/notifier-laravel",
     "description": "Notifier for Laravel is a package to add some useful classes to send notifications and logging.",
-    "version": "0.1.15",
+    "version": "0.1.16",
     "keywords": [
         "laravel",
         "notifier",
