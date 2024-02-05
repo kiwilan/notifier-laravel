@@ -75,6 +75,22 @@ it('can use command', function () {
     $success = Artisan::call('notifier', [
         'message' => 'Hello, Discord!',
         '--type' => 'discord',
+        '--webhook' => config('notifier.discord.webhook'),
+    ]);
+
+    expect($success)->toBe(0);
+
+    $success = Artisan::call('notifier', [
+        'message' => 'Hello, Discord!',
+        '--type' => 'discord',
+    ]);
+
+    expect($success)->toBe(0);
+
+    $success = Artisan::call('notifier', [
+        'message' => 'Hello, Slack!',
+        '--type' => 'slack',
+        '--webhook' => config('notifier.slack.webhook'),
     ]);
 
     expect($success)->toBe(0);
