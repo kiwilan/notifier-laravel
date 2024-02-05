@@ -43,7 +43,9 @@ class NotifierCommand extends Command
 
         $this->message = (string) $this->argument('message');
         $this->type = (string) $this->option('type');
+        $this->type = str_replace('=', '', $this->type);
         $this->webhook = (string) $this->option('webhook');
+        $this->webhook = str_replace('=', '', $this->webhook);
 
         $this->info("Sending notification to {$this->type}...");
 
