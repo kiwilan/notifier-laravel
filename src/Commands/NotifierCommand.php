@@ -15,7 +15,7 @@ class NotifierCommand extends Command
     protected $signature = 'notifier
                             {message : Message to send.}
                             {--t|type= : `mail`, `slack` or `discord`.}
-                            {--w|webhook : Webhook URL for Slack or Discor (leave blank to take config).}';
+                            {--w|webhook= : Webhook URL for Slack or Discor (leave blank to take config).}';
 
     /**
      * The console command description.
