@@ -3,6 +3,7 @@
 namespace Kiwilan\Notifier;
 
 use Illuminate\Support\Facades\Log;
+use Kiwilan\Notifier\Facades\Journal;
 use Kiwilan\Notifier\Notifier\NotifierDiscord;
 use Kiwilan\Notifier\Notifier\NotifierMail;
 use Kiwilan\Notifier\Notifier\NotifierSlack;
@@ -122,6 +123,7 @@ class Notifier
         array $headers = [],
         bool $json = true,
     ): array {
+        $url = urlencode($url);
         $headers = [
             ...$headers,
             $json ? 'Content-type: application/json' : 'Content-type: application/x-www-form-urlencoded',
@@ -135,8 +137,19 @@ class Notifier
             ],
         ];
 
-        $context = stream_context_create($opts);
-        $response = file_get_contents($url, false, $context);
+        $context = null;
+        $response = null;
+        try {
+            $context = stream_context_create($opts);
+            $response = file_get_contents($url, false, $context);
+        } catch (\Throwable $th) {
+            Journal::error("Failed to send request to {$url}: {$th->getMessage()}");
+
+            return [
+                'status_code' => 500,
+                'body' => "Failed to send request to {$url}: {$th->getMessage()}",
+            ];
+        }
 
         if ($response === false) {
             return [
