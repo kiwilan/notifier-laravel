@@ -3,10 +3,10 @@
 namespace Kiwilan\Notifier;
 
 use Illuminate\Support\Facades\Log;
-use Kiwilan\Notifier\Facades\Journal;
 use Kiwilan\Notifier\Notifier\NotifierDiscord;
 use Kiwilan\Notifier\Notifier\NotifierMail;
 use Kiwilan\Notifier\Notifier\NotifierSlack;
+use Kiwilan\Notifier\Utils\NotifierRequest;
 
 /**
  * Send notifications to email, Slack or Discord.
@@ -15,6 +15,8 @@ class Notifier
 {
     public function __construct(
         protected string $type = 'unknown',
+        protected array $requestData = [],
+        protected ?NotifierRequest $request = null,
     ) {
     }
 
@@ -25,6 +27,7 @@ class Notifier
     {
         $self = new self();
         $self->type = 'mail';
+        $self->requestData = [];
 
         return NotifierMail::make();
     }
@@ -107,64 +110,5 @@ class Notifier
         }
 
         return implode(PHP_EOL, $message);
-    }
-
-    /**
-     * Send HTTP request.
-     *
-     * @param  string  $url  URL to send request to
-     * @param  array  $body  Request body
-     * @param  array  $headers  Request headers
-     * @return array{status_code: int, body: string}
-     */
-    protected function sendRequest(
-        string $url,
-        array $body = [],
-        array $headers = [],
-        bool $json = true,
-    ): array {
-        $headers = [
-            ...$headers,
-            $json ? 'Content-type: application/json' : 'Content-type: application/x-www-form-urlencoded',
-        ];
-
-        $opts = [
-            'http' => [
-                'method' => 'POST',
-                'header' => $headers,
-                'content' => $json ? json_encode($body) : http_build_query($body),
-            ],
-        ];
-
-        $context = null;
-        $response = null;
-        try {
-            $context = stream_context_create($opts);
-            $response = file_get_contents($url, false, $context);
-        } catch (\Throwable $th) {
-            Journal::error("Failed to send request to {$url}: {$th->getMessage()}");
-
-            return [
-                'status_code' => 500,
-                'body' => "Failed to send request to {$url}: {$th->getMessage()}",
-            ];
-        }
-
-        if ($response === false) {
-            return [
-                'status_code' => 500,
-                'body' => "Failed to send request to {$url}",
-            ];
-        }
-
-        $httpCode = $http_response_header[0];
-        $statusCode = explode(' ', $httpCode)[1];
-        $httpCode = (int) $statusCode;
-        $body = $response;
-
-        return [
-            'status_code' => $httpCode,
-            'body' => $body,
-        ];
     }
 }

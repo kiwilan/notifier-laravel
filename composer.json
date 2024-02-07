@@ -27,6 +27,7 @@
     },
     "require-dev": {
         "filament/notifications": "^3.2",
+        "guzzlehttp/guzzle": "^7.8",
         "larastan/larastan": "^2.0.1",
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^7.8",
@@ -66,6 +67,7 @@
         ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
+        "test-filter": "vendor/bin/pest --filter",
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint"
     },
