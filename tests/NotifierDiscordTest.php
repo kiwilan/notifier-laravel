@@ -19,7 +19,30 @@ it('can use instance', function () {
     expect($facade)->toBeInstanceOf(NotifierNotifier::class);
 });
 
-it('can use discord', function () {
+it('can use clients', function () {
+    Config::set('notifier.client', 'stream');
+
+    $notifier = Notifier::discord()
+        ->message('Hello, Discord!')
+        ->send();
+    expect($notifier->isSuccess())->toBeTrue();
+
+    Config::set('notifier.client', 'curl');
+
+    $notifier = Notifier::discord()
+        ->message('Hello, Discord!')
+        ->send();
+    expect($notifier->isSuccess())->toBeTrue();
+
+    Config::set('notifier.client', 'guzzle');
+
+    $notifier = Notifier::discord()
+        ->message('Hello, Discord!')
+        ->send();
+    expect($notifier->isSuccess())->toBeTrue();
+});
+
+it('can use', function () {
     $notifier = Notifier::discord()
         ->message('Hello, Discord!')
         ->user('Notifier', 'https://raw.githubusercontent.com/kiwilan/notifier-laravel/main/docs/banner.jpg')

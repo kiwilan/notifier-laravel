@@ -7,6 +7,7 @@ class NotifierRequest
     protected function __construct(
         protected string $url,
         protected string $mode = 'stream',
+        protected bool $modeAuto = true,
         protected array $headers = [],
         protected array $request_data = [],
         protected ?array $response_body = [],
@@ -32,6 +33,7 @@ class NotifierRequest
     public function useStream(): self
     {
         $this->mode = 'stream';
+        $this->modeAuto = false;
 
         return $this;
     }
@@ -42,6 +44,7 @@ class NotifierRequest
     public function useCurl(): self
     {
         $this->mode = 'curl';
+        $this->modeAuto = false;
 
         return $this;
     }
@@ -52,6 +55,7 @@ class NotifierRequest
     public function useGuzzle(): self
     {
         $this->mode = 'guzzle';
+        $this->modeAuto = false;
 
         return $this;
     }
@@ -103,6 +107,10 @@ class NotifierRequest
     public function send(): self
     {
         try {
+            if ($this->modeAuto) {
+                $this->mode = config('notifier.client');
+            }
+
             if ($this->mode === 'stream') {
                 $this->stream();
             } elseif ($this->mode === 'curl') {

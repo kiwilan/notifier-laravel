@@ -44,6 +44,10 @@ This is the contents of the published config file:
 
 ```php
 return [
+    // Default notifier client to send HTTP request, can be `stream`, `curl` or `guzzle`.
+    // `guzzle` is not included in this package, you need to install it manually.
+    'client' => env('NOTIFIER_CLIENT', 'stream'),
+
     'discord' => [
         // Default Discord webhook URL.
         'webhook' => env('NOTIFIER_DISCORD_WEBHOOK', null),

@@ -1,11 +1,11 @@
 <?php
 
-namespace Kiwilan\Notifier\Notifier\Discord;
+namespace Kiwilan\Notifier\Notifier\Slack;
 
 use Illuminate\Support\Facades\Log;
 use Kiwilan\Notifier\Utils\NotifierRequest;
 
-abstract class NotifierDiscordContainer
+abstract class NotifierSlackContainer
 {
     protected function __construct(
         protected ?string $webhook = null,
@@ -29,10 +29,10 @@ abstract class NotifierDiscordContainer
             ->requestData($this->toArray())
             ->send();
 
-        $this->isSuccess = $this->request->getStatusCode() === 204;
+        $this->isSuccess = $this->request->getStatusCode() === 200;
 
         if ($this->isSuccess) {
-            Log::error("Notifier: discord notification failed with HTTP {$this->request->getStatusCode()}", [
+            Log::error("Notifier: slack notification failed with HTTP {$this->request->getStatusCode()}", [
                 $this->request->toArray(),
             ]);
         }

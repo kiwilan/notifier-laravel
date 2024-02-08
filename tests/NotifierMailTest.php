@@ -17,7 +17,7 @@ beforeEach(function () {
     Config::set('notifier.mail.to.name', dotenv()['NOTIFIER_MAIL_TO_NAME']);
 });
 
-it('can use mail', function () {
+it('can use', function () {
     $notifier = Notifier::mail()
         ->subject('Hello, Mail!')
         ->message('Hello, Mail!')
