@@ -30,6 +30,8 @@ class NotifierMail extends Notifier
         protected ?string $subject = null,
         protected ?string $message = null,
         protected ?string $html = null,
+        protected array $attachments = [],
+        protected bool $isSuccess = false,
     ) {
     }
 
@@ -219,7 +221,28 @@ class NotifierMail extends Notifier
         return $this;
     }
 
-    public function send(): bool
+    /**
+     * Add attachment to the email.
+     *
+     * @param  string  $path  File path
+     * @param  string|null  $name  File name
+     */
+    public function addAttachment(string $path, ?string $name = null): self
+    {
+        $this->attachments[] = [
+            'path' => $path,
+            'name' => $name,
+        ];
+
+        return $this;
+    }
+
+    public function isSuccess(): bool
+    {
+        return $this->isSuccess;
+    }
+
+    public function send(): self
     {
         $this->auto();
         $this->mailTransport = Transport::fromDsn("{$this->mailer}://{$this->host}:{$this->port}");
@@ -251,17 +274,24 @@ class NotifierMail extends Notifier
             $this->mailEmail->html($this->message);
         }
 
+        if (count($this->attachments) > 0) {
+            foreach ($this->attachments as $attachment) {
+                $this->mailEmail->attachFromPath($attachment['path'], $attachment['name']);
+            }
+        }
+
         try {
             $this->mailMailer->send($this->mailEmail);
         } catch (\Throwable $th) {
             $this->logError($th->getMessage(), $this->toArray());
 
-            return false;
+            return $this;
         }
 
+        $this->isSuccess = true;
         $this->logSent();
 
-        return true;
+        return $this;
     }
 
     public function toArray(): array
@@ -279,6 +309,7 @@ class NotifierMail extends Notifier
             'subject' => $this->subject,
             'message' => $this->message,
             'html' => $this->html,
+            'attachments' => $this->attachments,
         ];
     }
 }

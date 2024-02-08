@@ -35,6 +35,11 @@ it('can use', function () {
         ->attachment('*Hello, Slack!*')
         ->send();
     expect($notifier->isSuccess())->toBeTrue();
+
+    $notifier = Notifier::slack()
+        ->blocks('*Hello, Slack!*')
+        ->send();
+    expect($notifier->isSuccess())->toBeTrue();
 });
 
 it('can use command', function () {

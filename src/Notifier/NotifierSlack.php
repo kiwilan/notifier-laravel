@@ -4,6 +4,7 @@ namespace Kiwilan\Notifier\Notifier;
 
 use Kiwilan\Notifier\Notifier;
 use Kiwilan\Notifier\Notifier\Slack\NotifierSlackAttachment;
+use Kiwilan\Notifier\Notifier\Slack\NotifierSlackBlocks;
 use Kiwilan\Notifier\Notifier\Slack\NotifierSlackMessage;
 
 /**
@@ -46,10 +47,10 @@ class NotifierSlack extends Notifier
     /**
      * @param  string[]|string  $message
      */
-    public function blocks(array|string $message): NotifierSlackAttachment
+    public function blocks(array|string $message): NotifierSlackBlocks
     {
         $message = $this->arrayToString($message);
 
-        return NotifierSlackAttachment::create($this->webhook, $message);
+        return NotifierSlackBlocks::create($this->webhook, $message);
     }
 }

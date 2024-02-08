@@ -27,17 +27,20 @@ it('can use', function () {
         ->credentials(config('notifier.mail.username'), config('notifier.mail.password'))
         ->encryption(config('notifier.mail.encryption'))
         ->from(config('notifier.mail.from.address'), config('notifier.mail.from.name'))
-        ->to(config('notifier.mail.to.address'), config('notifier.mail.to.name'));
+        ->to(config('notifier.mail.to.address'), config('notifier.mail.to.name'))
+        ->send();
 
-    expect($notifier->send())->toBeTrue();
+    expect($notifier->isSuccess())->toBeTrue();
 });
 
 it('can use custom mail', function () {
     $notifier = Notifier::mail()
         ->subject('Hello, Mail!')
-        ->message('Hello, Mail!');
+        ->message('Hello, Mail!')
+        ->addAttachment(__DIR__.'/media/text.md', 'text.md')
+        ->send();
 
-    expect($notifier->send())->toBeTrue();
+    expect($notifier->isSuccess())->toBeTrue();
 });
 
 it('can use command', function () {
