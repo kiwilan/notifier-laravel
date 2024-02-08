@@ -9,7 +9,7 @@ use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
-class NotifierMail extends Notifier implements INotifier
+class NotifierMail extends Notifier
 {
     /**
      * @param  Address[]  $to  Array of `Address` object

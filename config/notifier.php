@@ -40,4 +40,9 @@ return [
         // Recipients ID for notification.
         'recipients_id' => explode(',', env('NOTIFIER_TO_DATABASE_RECIPIENTS_ID', ''), 0),
     ],
+
+    'journal' => [
+        // Write error logs with `error_log` function, in addition to Laravel log.
+        'use_error_log' => env('NOTIFIER_JOURNAL_USE_ERROR_LOG', true),
+    ],
 ];

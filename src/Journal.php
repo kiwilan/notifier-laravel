@@ -6,7 +6,6 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Kiwilan\Notifier\Notifier\INotifier;
 
 class Journal
 {
@@ -17,7 +16,6 @@ class Journal
         protected ?string $message = null,
         protected string $level = 'info',
         protected array|string $data = [],
-        protected ?INotifier $notifier = null,
     ) {
         if (is_string($data)) {
             $this->data = [$data];
@@ -91,8 +89,10 @@ class Journal
     private function log(): void
     {
         Log::log($this->level, $this->message, $this->data);
-        $data = json_encode($this->data, JSON_PRETTY_PRINT);
-        error_log("Journal: {$this->level} - {$this->message} - {$data}");
+        if (config('notifier.journal.use_error_log')) {
+            $data = json_encode($this->data, JSON_PRETTY_PRINT);
+            error_log("Journal: {$this->level} - {$this->message} - {$data}");
+        }
     }
 
     /**
@@ -145,15 +145,15 @@ class Journal
      */
     public function toNotifier(string $type): self
     {
-        $this->notifier = match ($type) {
+        $notifier = match ($type) {
             'mail' => Notifier::mail(),
             'slack' => Notifier::slack(),
             'discord' => Notifier::discord(),
             default => null,
         };
 
-        $this->notifier->message([$this->message, json_encode($this->data, JSON_PRETTY_PRINT)])
-            ->send();
+        // $this->notifier->message([$this->message, json_encode($this->data, JSON_PRETTY_PRINT)])
+        //     ->send();
 
         return $this;
     }
