@@ -4,7 +4,7 @@ namespace Kiwilan\Notifier\Notifier\Slack;
 
 use Kiwilan\Notifier\Utils\NotifierHelpers;
 
-class NotifierSlackMessage extends NotifierSlackContainer
+class NotifierSlackBlocks extends NotifierSlackContainer
 {
     protected function __construct(
         protected ?string $text = null,
