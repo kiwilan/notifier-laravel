@@ -2,20 +2,19 @@
 
 namespace Kiwilan\Notifier\Notifier\Slack;
 
+use Kiwilan\Notifier\Utils\NotifierHelpers;
+
 class NotifierSlackMessage extends NotifierSlackContainer
 {
     protected function __construct(
-        protected ?string $message = null,
-        protected ?string $username = null,
-        protected ?string $avatarUrl = null,
+        protected ?string $text = null,
+        protected string $type = 'plain_text',
     ) {
     }
 
     public static function create(string $webhook, string $message): self
     {
-        if (strlen($message) > 2000) {
-            $message = substr($message, 0, 1980).'...';
-        }
+        $message = NotifierHelpers::truncate($message);
 
         $self = new self($message);
         $self->webhook = $webhook;
@@ -23,30 +22,16 @@ class NotifierSlackMessage extends NotifierSlackContainer
         return $self;
     }
 
-    public function user(string $username, ?string $avatarUrl = null): self
-    {
-        $this->username = $username;
-
-        if ($avatarUrl) {
-            $this->avatarUrl = $avatarUrl;
-        }
-
-        return $this;
-    }
-
     public function toArray(): array
     {
         $data = [];
 
-        if ($this->username) {
-            $data['username'] = $this->username;
-        }
+        // $data['text'] = [
+        //     'type' => $this->type,
+        //     'text' => $this->text,
+        // ];
 
-        if ($this->avatarUrl) {
-            $data['avatar_url'] = $this->avatarUrl;
-        }
-
-        $data['content'] = $this->message ?? 'Empty message.';
+        $data['text'] = $this->text;
 
         return $data;
     }

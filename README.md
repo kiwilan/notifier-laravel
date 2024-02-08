@@ -24,7 +24,7 @@ Works for [Discord webhooks](https://support.discord.com/hc/en-us/articles/22838
 > When native Laravel notifications are for users, this package is designed for developers to help for debugging and monitoring, but you can use it for users too.
 
 > [!IMPORTANT]
-> This package offer a support for Discord and Slack webhooks, but Slack has only basic support, for more, you can use [`laravel/slack-notification-channel`](https://github.com/laravel/slack-notification-channel). To avoid dependencies, this package doesn't use it.
+> This package offer a support for Discord and Slack webhooks, but Slack has only basic support (without legacy API support), for more, you can use [`laravel/slack-notification-channel`](https://github.com/laravel/slack-notification-channel). To avoid dependencies, this package doesn't use it.
 
 ## Installation
 

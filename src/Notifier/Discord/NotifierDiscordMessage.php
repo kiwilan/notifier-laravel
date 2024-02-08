@@ -2,6 +2,8 @@
 
 namespace Kiwilan\Notifier\Notifier\Discord;
 
+use Kiwilan\Notifier\Utils\NotifierHelpers;
+
 class NotifierDiscordMessage extends NotifierDiscordContainer
 {
     protected function __construct(
@@ -13,9 +15,7 @@ class NotifierDiscordMessage extends NotifierDiscordContainer
 
     public static function create(string $webhook, string $message): self
     {
-        if (strlen($message) > 2000) {
-            $message = substr($message, 0, 1980).'...';
-        }
+        $message = NotifierHelpers::truncate($message);
 
         $self = new self($message);
         $self->webhook = $webhook;

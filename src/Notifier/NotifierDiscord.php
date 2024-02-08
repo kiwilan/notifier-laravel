@@ -23,13 +23,23 @@ class NotifierDiscord extends Notifier
         return new self($webhook);
     }
 
-    public function message(string $message): NotifierDiscordMessage
+    /**
+     * @param  string[]|string  $message
+     */
+    public function message(array|string $message): NotifierDiscordMessage
     {
+        $message = $this->arrayToString($message);
+
         return NotifierDiscordMessage::create($this->webhook, $message);
     }
 
-    public function rich(string $message): NotifierDiscordRich
+    /**
+     * @param  string[]|string  $message
+     */
+    public function rich(array|string $message): NotifierDiscordRich
     {
+        $message = $this->arrayToString($message);
+
         return NotifierDiscordRich::create($this->webhook, $message);
     }
 }

@@ -4,6 +4,7 @@ namespace Kiwilan\Notifier\Notifier\Discord;
 
 use Carbon\Carbon;
 use DateTime;
+use Kiwilan\Notifier\Utils\NotifierHelpers;
 
 class NotifierDiscordRich extends NotifierDiscordContainer
 {
@@ -28,6 +29,8 @@ class NotifierDiscordRich extends NotifierDiscordContainer
 
     public static function create(string $webhook, string $description): self
     {
+        $description = NotifierHelpers::truncate($description);
+
         $self = new self($description);
         $self->webhook = $webhook;
 

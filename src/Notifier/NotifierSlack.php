@@ -3,8 +3,12 @@
 namespace Kiwilan\Notifier\Notifier;
 
 use Kiwilan\Notifier\Notifier;
-use Kiwilan\Notifier\Utils\NotifierRequest;
+use Kiwilan\Notifier\Notifier\Slack\NotifierSlackMessage;
 
+/**
+ * @see https://api.slack.com/messaging/webhooks#advanced_message_formatting
+ * @see https://api.slack.com/block-kit
+ */
 class NotifierSlack extends Notifier
 {
     protected function __construct(
@@ -18,34 +22,13 @@ class NotifierSlack extends Notifier
         return new self($webhook);
     }
 
-    public function message(array|string $message): self
+    /**
+     * @param  string[]|string  $message
+     */
+    public function message(array|string $message): NotifierSlackMessage
     {
-        $this->message = $this->arrayToString($message);
+        $message = $this->arrayToString($message);
 
-        return $this;
-    }
-
-    public function send(): bool
-    {
-        $this->request = NotifierRequest::make($this->webhook)
-            ->requestData($this->toArray())
-            ->send();
-
-        if ($this->request->getStatusCode() !== 200) {
-            $this->logError("status code {$this->request->getStatusCode()}", [
-                $this->request->toArray(),
-            ]);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'text' => $this->message ?? '',
-        ];
+        return NotifierSlackMessage::create($this->webhook, $message);
     }
 }

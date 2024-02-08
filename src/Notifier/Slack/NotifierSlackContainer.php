@@ -14,7 +14,7 @@ abstract class NotifierSlackContainer
     ) {
     }
 
-    abstract public static function create(string $webhook, string $description): self;
+    abstract public static function create(string $webhook, string $message): self;
 
     abstract public function toArray(): array;
 

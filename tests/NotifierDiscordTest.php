@@ -50,7 +50,21 @@ it('can use', function () {
     expect($notifier->isSuccess())->toBeTrue();
 
     $notifier = Notifier::discord()
-        ->rich('Rich simple')
+        ->message([
+            'Hello, Discord!',
+            'This is a message.',
+        ])
+        ->user('Notifier', 'https://raw.githubusercontent.com/kiwilan/notifier-laravel/main/docs/banner.jpg')
+        ->send();
+    expect($notifier->isSuccess())->toBeTrue();
+
+    $notifier = Notifier::discord()
+        ->rich([
+            'Rich',
+            'simple',
+            'for',
+            'Discord',
+        ])
         ->send();
     expect($notifier->isSuccess())->toBeTrue();
 
