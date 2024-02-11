@@ -19,7 +19,7 @@ Notifier for Laravel is a package to send notifications (with `Notifier`) and mo
 Based on [`kiwilan/php-notifier`](https://github.com/kiwilan/php-notifier).
 
 > [!IMPORTANT]
-> This package does not support push notifications or SMS (if you interested, a PR is welcome).
+> This package does not support push notifications or SMS (if you interested, a PR is welcome) on [`kiwilan/php-notifier`](https://github.com/kiwilan/php-notifier).
 
 ## About
 
