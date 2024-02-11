@@ -58,7 +58,13 @@ jobs:
         run: |
           touch .env
           echo NOTIFIER_DISCORD_WEBHOOK=${{ secrets.NOTIFIER_DISCORD_WEBHOOK }} >> .env
+          echo NOTIFIER_DISCORD_USERNAME=${{ secrets.NOTIFIER_DISCORD_USERNAME }} >> .env
+          echo NOTIFIER_DISCORD_AVATAR_URL=${{ secrets.NOTIFIER_DISCORD_AVATAR_URL }} >> .env
+
           echo NOTIFIER_SLACK_WEBHOOK=${{ secrets.NOTIFIER_SLACK_WEBHOOK }} >> .env
+
+          echo NOTIFIER_MAIL_LARAVEL_OVERRIDE=${{ secrets.NOTIFIER_MAIL_LARAVEL_OVERRIDE }} >> .env
+          echo NOTIFIER_MAIL_SUBJECT=${{ secrets.NOTIFIER_MAIL_SUBJECT }} >> .env
           echo NOTIFIER_MAIL_MAILER=${{ secrets.NOTIFIER_MAIL_MAILER }} >> .env
           echo NOTIFIER_MAIL_HOST=${{ secrets.NOTIFIER_MAIL_HOST }} >> .env
           echo NOTIFIER_MAIL_PORT=${{ secrets.NOTIFIER_MAIL_PORT }} >> .env
@@ -66,9 +72,14 @@ jobs:
           echo NOTIFIER_MAIL_PASSWORD=${{ secrets.NOTIFIER_MAIL_PASSWORD }} >> .env
           echo NOTIFIER_MAIL_ENCRYPTION=${{ secrets.NOTIFIER_MAIL_ENCRYPTION }} >> .env
           echo NOTIFIER_MAIL_FROM_ADDRESS=${{ secrets.NOTIFIER_MAIL_FROM_ADDRESS }} >> .env
+          echo NOTIFIER_MAIL_FROM_NAME=${{ secrets.NOTIFIER_MAIL_FROM_NAME }} >> .env
           echo NOTIFIER_MAIL_TO_ADDRESS=${{ secrets.NOTIFIER_MAIL_TO_ADDRESS }} >> .env
+          echo NOTIFIER_MAIL_TO_NAME=${{ secrets.NOTIFIER_MAIL_TO_NAME }} >> .env
+
           echo NOTIFIER_REQUEST=${{ secrets.NOTIFIER_REQUEST }} >> .env
+
           echo NOTIFIER_MOCK=false >> .env
+
           echo NOTIFIER_JOURNAL_DEBUG=${{ secrets.NOTIFIER_JOURNAL_DEBUG }} >> .env
 
       - name: Execute tests
