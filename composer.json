@@ -22,7 +22,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/contracts": "^10.0",
-        "kiwilan/php-notifier": "^0.0.31",
+        "kiwilan/php-notifier": "^0.0.32",
         "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
