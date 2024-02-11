@@ -18,8 +18,8 @@ Notifier for Laravel is a package to send notifications (with `Notifier`) and mo
 
 Based on [`kiwilan/php-notifier`](https://github.com/kiwilan/php-notifier). Works for [Discord webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks), [Slack webhooks](https://api.slack.com/messaging/webhooks) and emails with [`symfony/mailer`](https://symfony.com/doc/current/mailer.html).
 
-> [!NOTE]
-> The configuration file is totally optional, if you have multiple webhooks, you can create your own configs to send notifications.
+> [!IMPORTANT]
+> This package does not support push notifications or SMS (if you interested, a PR is welcome).
 
 ## About
 
@@ -48,6 +48,9 @@ You can publish the config file with:
 ```bash
 php artisan vendor:publish --tag="notifier-config"
 ```
+
+> [!NOTE]
+> The configuration file is totally optional, if you have multiple webhooks, you can create your own configs to send notifications.
 
 This is the contents of the published config file:
 
