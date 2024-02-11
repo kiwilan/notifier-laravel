@@ -51,6 +51,7 @@ return [
     ],
 
     'journal' => [
+        // Write logs for debugging when notifications are sent.
         'debug' => env('NOTIFIER_JOURNAL_DEBUG', false),
         // Write error logs with `error_log` function, in addition to Laravel log.
         'use_error_log' => env('NOTIFIER_JOURNAL_USE_ERROR_LOG', true),
