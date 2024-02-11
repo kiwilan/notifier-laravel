@@ -69,6 +69,7 @@ jobs:
           echo NOTIFIER_MAIL_TO_ADDRESS=${{ secrets.NOTIFIER_MAIL_TO_ADDRESS }} >> .env
           echo NOTIFIER_REQUEST=${{ secrets.NOTIFIER_REQUEST }} >> .env
           echo NOTIFIER_MOCK=false >> .env
+          echo NOTIFIER_JOURNAL_DEBUG=${{ secrets.NOTIFIER_JOURNAL_DEBUG }} >> .env
 
       - name: Execute tests
         run: vendor/bin/pest --coverage

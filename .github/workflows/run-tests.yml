@@ -82,5 +82,7 @@ jobs:
           echo NOTIFIER_MAIL_TO_ADDRESS=${{ secrets.NOTIFIER_MAIL_TO_ADDRESS }} >> .env
           echo NOTIFIER_MAIL_TO_NAME=${{ secrets.NOTIFIER_MAIL_TO_NAME }} >> .env
 
+          echo NOTIFIER_JOURNAL_DEBUG=${{ secrets.NOTIFIER_JOURNAL_DEBUG }} >> .env
+
       - name: Execute tests
         run: vendor/bin/pest --ci
