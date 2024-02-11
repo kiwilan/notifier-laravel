@@ -1,9 +1,9 @@
 <?php
 
-namespace Kiwilan\Notifier\Tests;
+namespace Kiwilan\LaravelNotifier\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Kiwilan\Notifier\NotifierServiceProvider;
+use Kiwilan\LaravelNotifier\LaravelNotifierServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -20,7 +20,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            NotifierServiceProvider::class,
+            LaravelNotifierServiceProvider::class,
         ];
     }
 

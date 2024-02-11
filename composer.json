@@ -22,8 +22,8 @@
     "require": {
         "php": "^8.1",
         "illuminate/contracts": "^10.0",
-        "spatie/laravel-package-tools": "^1.14.0",
-        "symfony/mailer": "^6.4"
+        "kiwilan/php-notifier": "^0.0.31",
+        "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
         "filament/notifications": "^3.2",
@@ -42,13 +42,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Kiwilan\\Notifier\\": "src/",
-            "Kiwilan\\Notifier\\Database\\Factories\\": "database/factories/"
+            "Kiwilan\\LaravelNotifier\\": "src/",
+            "Kiwilan\\LaravelNotifier\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Kiwilan\\Notifier\\Tests\\": "tests/",
+            "Kiwilan\\LaravelNotifier\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -81,10 +81,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Kiwilan\\Notifier\\NotifierServiceProvider"
+                "Kiwilan\\LaravelNotifier\\LaravelNotifierServiceProvider"
             ],
             "aliases": {
-                "Notifier": "Kiwilan\\Notifier\\Facades\\Notifier"
+                "LaravelNotifier": "Kiwilan\\LaravelNotifier\\Facades\\Notifier"
             }
         }
     },

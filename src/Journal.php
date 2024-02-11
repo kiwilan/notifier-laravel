@@ -1,11 +1,12 @@
 <?php
 
-namespace Kiwilan\Notifier;
+namespace Kiwilan\LaravelNotifier;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Kiwilan\LaravelNotifier\Facades\Notifier;
 
 class Journal
 {
@@ -93,6 +94,8 @@ class Journal
             $data = json_encode($this->data, JSON_PRETTY_PRINT);
             error_log("Journal: {$this->level} - {$this->message} - {$data}");
         }
+
+        // dump($this->message, $this->data);
     }
 
     /**
@@ -149,6 +152,7 @@ class Journal
             'mail' => Notifier::mail(),
             'slack' => Notifier::slack(),
             'discord' => Notifier::discord(),
+            'http' => Notifier::http(),
             default => null,
         };
 

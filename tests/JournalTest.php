@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Config;
-use Kiwilan\Notifier\Facades\Journal;
-use Kiwilan\Notifier\Journal as NotifierJournal;
+use Kiwilan\LaravelNotifier\Facades\Journal;
+use Kiwilan\LaravelNotifier\Journal as NotifierJournal;
 
 beforeEach(function () {
     Config::set('notifier.discord.webhook', dotenv()['NOTIFIER_DISCORD_WEBHOOK']);
+    Config::set('app.env', 'testing');
 });
 
 it('can use instance', function () {
@@ -45,7 +46,6 @@ it('can send to notifier', function () {
 it('can use journal', function () {
     $journal = Journal::info('Hello, Journal!');
     $log = getLog();
-    // dump($journal);
 
     $exception = new Exception('Hello, Exception!');
     $journal = Journal::handler($exception);

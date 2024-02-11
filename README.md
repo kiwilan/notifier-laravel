@@ -16,6 +16,8 @@
 
 Notifier for Laravel is a package to add some useful classes to send notifications (with `Notifier::class`) and monitoring (with `Journal::class`). The configuration file is totally optional, if you have multiple webhooks, you can create your own configs to send notifications.
 
+Based on [`kiwilan/php-notifier`](https://github.com/kiwilan/php-notifier).
+
 Works for [Discord webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks), [Slack webhooks](https://api.slack.com/messaging/webhooks) and emails with [`symfony/mailer`](https://symfony.com/doc/current/mailer.html).
 
 ## About
@@ -82,6 +84,11 @@ return [
     'slack' => [
         // Default Slack webhook URL.
         'webhook' => env('NOTIFIER_SLACK_WEBHOOK', null),
+    ],
+
+    'http' => [
+        // Default HTTP URL to send request.
+        'url' => env('NOTIFIER_HTTP_URL', null),
     ],
 
     // This feature use `filament/notifications` package, not included in this package.
@@ -170,7 +177,7 @@ class Handler extends ExceptionHandler
 Notifier is an alternative to [Laravel Notifications](https://laravel.com/docs/10.x/notifications).
 
 > [!NOTE]
-> If `app.debug` is `true`, `debug` level logs will be written for sending and sent notifications.
+> If `notifier.journal.debug` is `true`, `debug` level logs will be written for sending and sent notifications.
 > In all cases, `error` level logs will be written for sending errors.
 
 #### Discord

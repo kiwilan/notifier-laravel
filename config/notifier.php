@@ -37,6 +37,11 @@ return [
         'webhook' => env('NOTIFIER_SLACK_WEBHOOK', null),
     ],
 
+    'http' => [
+        // Default HTTP URL to send request.
+        'url' => env('NOTIFIER_HTTP_URL', null),
+    ],
+
     // This feature use `filament/notifications` package, not included in this package.
     'to_database' => [
         // Default user model for notification.
@@ -46,6 +51,7 @@ return [
     ],
 
     'journal' => [
+        'debug' => env('NOTIFIER_JOURNAL_DEBUG', false),
         // Write error logs with `error_log` function, in addition to Laravel log.
         'use_error_log' => env('NOTIFIER_JOURNAL_USE_ERROR_LOG', true),
     ],

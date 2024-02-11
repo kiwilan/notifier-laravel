@@ -2,44 +2,12 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use Kiwilan\Notifier\Facades\Notifier;
-use Kiwilan\Notifier\Notifier as NotifierNotifier;
+use Kiwilan\LaravelNotifier\Facades\Notifier;
 
 beforeEach(function () {
     Config::set('notifier.discord.webhook', dotenv()['NOTIFIER_DISCORD_WEBHOOK']);
     Config::set('notifier.discord.username', dotenv()['NOTIFIER_DISCORD_USERNAME']);
     Config::set('notifier.discord.avatar_url', dotenv()['NOTIFIER_DISCORD_AVATAR_URL']);
-});
-
-it('can use instance', function () {
-    $facade = Notifier::discord();
-    $instance = (new NotifierNotifier())->discord();
-
-    expect($facade)->toEqual($instance);
-    expect($facade)->toBeInstanceOf(NotifierNotifier::class);
-});
-
-it('can use clients', function () {
-    Config::set('notifier.client', 'stream');
-
-    $notifier = Notifier::discord()
-        ->message('Hello, Discord!')
-        ->send();
-    expect($notifier->isSuccess())->toBeTrue();
-
-    Config::set('notifier.client', 'curl');
-
-    $notifier = Notifier::discord()
-        ->message('Hello, Discord!')
-        ->send();
-    expect($notifier->isSuccess())->toBeTrue();
-
-    Config::set('notifier.client', 'guzzle');
-
-    $notifier = Notifier::discord()
-        ->message('Hello, Discord!')
-        ->send();
-    expect($notifier->isSuccess())->toBeTrue();
 });
 
 it('can use', function () {
@@ -133,17 +101,15 @@ it('can use', function () {
 
 it('can use command', function () {
     $success = Artisan::call('notifier', [
-        'message' => 'Hello, Discord!',
+        'message' => 'Hello, Discord with webhook!',
         '--type' => 'discord',
         '--webhook' => config('notifier.discord.webhook'),
     ]);
-
     expect($success)->toBe(0);
 
     $success = Artisan::call('notifier', [
-        'message' => 'Hello, Discord!',
+        'message' => 'Hello, Discord with config!',
         '--type' => 'discord',
     ]);
-
     expect($success)->toBe(0);
 });

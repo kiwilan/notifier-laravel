@@ -1,9 +1,9 @@
 <?php
 
-namespace Kiwilan\Notifier\Commands;
+namespace Kiwilan\LaravelNotifier\Commands;
 
 use Illuminate\Console\Command;
-use Kiwilan\Notifier\Facades\Notifier;
+use Kiwilan\LaravelNotifier\Facades\Notifier;
 
 class NotifierCommand extends Command
 {

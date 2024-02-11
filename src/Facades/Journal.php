@@ -1,22 +1,22 @@
 <?php
 
-namespace Kiwilan\Notifier\Facades;
+namespace Kiwilan\LaravelNotifier\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Kiwilan\Notifier\Journal
+ * @see \Kiwilan\LaravelNotifier\Journal
  *
- * @method static \Kiwilan\Notifier\Journal info(string $message, array|string $data = [])
- * @method static \Kiwilan\Notifier\Journal debug(string $message, array|string $data = [])
- * @method static \Kiwilan\Notifier\Journal warning(string $message, array|string $data = [])
- * @method static \Kiwilan\Notifier\Journal error(string $message, array|string $data = [])
- * @method static \Kiwilan\Notifier\Journal handler(\Throwable $e, bool $toDatabase = false, ?string $toNotifier = null)
+ * @method static \Kiwilan\LaravelNotifier\Journal info(string $message, array|string $data = [])
+ * @method static \Kiwilan\LaravelNotifier\Journal debug(string $message, array|string $data = [])
+ * @method static \Kiwilan\LaravelNotifier\Journal warning(string $message, array|string $data = [])
+ * @method static \Kiwilan\LaravelNotifier\Journal error(string $message, array|string $data = [])
+ * @method static \Kiwilan\LaravelNotifier\Journal handler(\Throwable $e, bool $toDatabase = false, ?string $toNotifier = null)
  */
 class Journal extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Kiwilan\Notifier\Journal::class;
+        return \Kiwilan\LaravelNotifier\Journal::class;
     }
 }

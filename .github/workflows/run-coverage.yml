@@ -1,10 +1,10 @@
-name: run-tests
+name: Coverage
 
 on:
   push:
     paths:
       - "**.php"
-      - ".github/workflows/run-tests.yml"
+      - ".github/workflows/run-tests-pest.yml"
       - "phpunit.xml.dist"
       - "composer.json"
       - "composer.lock"
@@ -14,18 +14,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 5
     strategy:
+      max-parallel: 1
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        php: [8.3, 8.2, 8.1]
-        laravel: [10.*]
+        php: [8.1]
         stability: [prefer-stable]
-        include:
-          - laravel: 10.*
-            testbench: 8.*
-            carbon: ^2.63
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -53,9 +49,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Install dependencies
-        run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
         run: composer show -D
@@ -64,13 +58,7 @@ jobs:
         run: |
           touch .env
           echo NOTIFIER_DISCORD_WEBHOOK=${{ secrets.NOTIFIER_DISCORD_WEBHOOK }} >> .env
-          echo NOTIFIER_DISCORD_AVATAR_URL=${{ secrets.NOTIFIER_DISCORD_AVATAR_URL }} >> .env
-          echo NOTIFIER_DISCORD_USERNAME=${{ secrets.NOTIFIER_DISCORD_USERNAME }} >> .env
           echo NOTIFIER_SLACK_WEBHOOK=${{ secrets.NOTIFIER_SLACK_WEBHOOK }} >> .env
-
-          echo NOTIFIER_MAIL_LARAVEL_OVERRIDE=${{ secrets.NOTIFIER_MAIL_LARAVEL_OVERRIDE }} >> .env
-          echo NOTIFIER_MAIL_SUBJECT=${{ secrets.NOTIFIER_MAIL_SUBJECT }} >> .env
-
           echo NOTIFIER_MAIL_MAILER=${{ secrets.NOTIFIER_MAIL_MAILER }} >> .env
           echo NOTIFIER_MAIL_HOST=${{ secrets.NOTIFIER_MAIL_HOST }} >> .env
           echo NOTIFIER_MAIL_PORT=${{ secrets.NOTIFIER_MAIL_PORT }} >> .env
@@ -78,9 +66,15 @@ jobs:
           echo NOTIFIER_MAIL_PASSWORD=${{ secrets.NOTIFIER_MAIL_PASSWORD }} >> .env
           echo NOTIFIER_MAIL_ENCRYPTION=${{ secrets.NOTIFIER_MAIL_ENCRYPTION }} >> .env
           echo NOTIFIER_MAIL_FROM_ADDRESS=${{ secrets.NOTIFIER_MAIL_FROM_ADDRESS }} >> .env
-          echo NOTIFIER_MAIL_FROM_NAME=${{ secrets.NOTIFIER_MAIL_FROM_NAME }} >> .env
           echo NOTIFIER_MAIL_TO_ADDRESS=${{ secrets.NOTIFIER_MAIL_TO_ADDRESS }} >> .env
-          echo NOTIFIER_MAIL_TO_NAME=${{ secrets.NOTIFIER_MAIL_TO_NAME }} >> .env
+          echo NOTIFIER_REQUEST=${{ secrets.NOTIFIER_REQUEST }} >> .env
+          echo NOTIFIER_MOCK=false >> .env
 
       - name: Execute tests
-        run: vendor/bin/pest --ci
+        run: vendor/bin/pest --coverage
+
+      - name: Send code coverage
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: false

@@ -1,23 +1,9 @@
 <?php
 
-use Kiwilan\Notifier\Tests\TestCase;
+use Kiwilan\LaravelNotifier\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);
 
-/**
- * @return array{
- *  NOTIFIER_DISCORD_WEBHOOK: string,
- *  NOTIFIER_SLACK_WEBHOOK: string,
- *  NOTIFIER_MAIL_MAILER: string,
- *  NOTIFIER_MAIL_HOST: string,
- *  NOTIFIER_MAIL_PORT: string,
- *  NOTIFIER_MAIL_USERNAME: string,
- *  NOTIFIER_MAIL_PASSWORD: string,
- *  NOTIFIER_MAIL_ENCRYPTION: string,
- *  NOTIFIER_MAIL_FROM_ADDRESS: string,
- *  NOTIFIER_MAIL_FROM_NAME: string,
- * }
- */
 function dotenv(): array
 {
     $path = __DIR__.'/../';
@@ -58,11 +44,9 @@ function getLog(): string
         default => 'php --info | grep error',
     };
 
-    // dump($cmd);
     $output = exec($cmd);
     $log_path_regex = '/error_log => (.*)/';
     preg_match($log_path_regex, $output, $matches);
-    // dump($output);
 
     return $matches[1];
 }

@@ -1,35 +1,35 @@
 <?php
 
-namespace Kiwilan\Notifier;
+namespace Kiwilan\LaravelNotifier;
 
-use Illuminate\Support\Facades\Log;
-use Kiwilan\Notifier\Notifier\NotifierDiscord;
-use Kiwilan\Notifier\Notifier\NotifierMail;
-use Kiwilan\Notifier\Notifier\NotifierSlack;
-use Kiwilan\Notifier\Utils\NotifierRequest;
+use Kiwilan\LaravelNotifier\Facades\Journal;
+use Kiwilan\Notifier\NotifierDiscord;
+use Kiwilan\Notifier\NotifierHttp;
+use Kiwilan\Notifier\NotifierMail;
+use Kiwilan\Notifier\NotifierSlack;
+use Symfony\Component\Mime\Address;
 
 /**
  * Send notifications to email, Slack or Discord.
  */
 class Notifier
 {
-    public function __construct(
-        protected string $type = 'unknown',
-        protected array $requestData = [],
-        protected ?NotifierRequest $request = null,
-    ) {
-    }
-
     /**
      * Send notification to email.
      */
-    public static function mail(): NotifierMail
+    public function mail(): NotifierMail
     {
-        $self = new self();
-        $self->type = 'mail';
-        $self->requestData = [];
-
-        return NotifierMail::make();
+        return NotifierMail::make()
+            ->autoConfig($this->autoMail())
+            ->logSending(function (array $data) {
+                $this->logSending('mail', $data);
+            })
+            ->logError(function (string $reason, array $data = []) {
+                $this->logError('mail', $reason, $data);
+            })
+            ->logSent(function (array $data) {
+                $this->logSent('mail', $data);
+            });
     }
 
     /**
@@ -39,18 +39,19 @@ class Notifier
      *
      * @see https://api.slack.com/messaging/webhooks
      */
-    public static function slack(?string $webhook = null): NotifierSlack
+    public function slack(?string $webhook = null, ?string $client = null): NotifierSlack
     {
-        $self = new self();
-        $self->type = 'slack';
-
         if (! $webhook) {
             $webhook = config('notifier.slack.webhook');
         }
 
-        $self->checkWebhook($webhook);
-
-        return NotifierSlack::make($webhook);
+        return NotifierSlack::make($webhook, $this->setClient($client))
+            ->logError(function (string $reason, array $data = []) {
+                $this->logError('slack', $reason, $data);
+            })
+            ->logSent(function (array $data) {
+                $this->logSent('slack', $data);
+            });
     }
 
     /**
@@ -60,55 +61,112 @@ class Notifier
      *
      * @see https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
      */
-    public static function discord(?string $webhook = null): NotifierDiscord
+    public function discord(?string $webhook = null, ?string $client = null): NotifierDiscord
     {
-        $self = new self();
-        $self->type = 'discord';
-
         if (! $webhook) {
             $webhook = config('notifier.discord.webhook');
         }
 
-        $self->checkWebhook($webhook);
-
-        return NotifierDiscord::make($webhook);
-    }
-
-    protected function logSending(string $message): void
-    {
-        if (config('app.debug') === true) {
-            Log::debug("Notifier: sending {$this->type} notification: {$message}...");
-        }
-    }
-
-    protected function logError(string $reason, array $data = []): void
-    {
-        Log::error("Notifier: notification failed: {$reason}", $data);
-    }
-
-    protected function logSent(): void
-    {
-        if (config('app.debug') === true) {
-            Log::debug("Notifier: {$this->type} notification sent");
-        }
-    }
-
-    protected function checkWebhook(?string $webhook = null): void
-    {
-        if (! $webhook) {
-            throw new \InvalidArgumentException("Notifier: {$this->type} webhook URL is required");
-        }
+        return NotifierDiscord::make($webhook, $this->setClient($client))
+            ->logError(function (string $reason, array $data = []) {
+                $this->logError('discord', $reason, $data);
+            })
+            ->logSent(function (array $data) {
+                $this->logSent('discord', $data);
+            });
     }
 
     /**
-     * @param  string|string[]  $message
+     * Send notification to HTTP endpoint.
+     *
+     * @param  string  $url  HTTP endpoint URL
      */
-    protected function arrayToString(array|string $message): string
+    public function http(?string $url = null, ?string $client = null): NotifierHttp
     {
-        if (is_string($message)) {
-            return $message;
+        if (! $url) {
+            $url = config('notifier.http.url');
         }
 
-        return implode(PHP_EOL, $message);
+        if (! $url) {
+            throw new \Exception('Notifier: HTTP URL is not set');
+        }
+
+        return NotifierHttp::make($url, $this->setClient($client))
+            ->logError(function (string $reason, array $data = []) {
+                $this->logError('http', $reason, $data);
+            })
+            ->logSent(function (array $data) {
+                $this->logSent('http', $data);
+            });
+    }
+
+    protected function logSending(string $type, array $data = []): void
+    {
+        if ($this->isDebug()) {
+            Journal::debug("Notifier for {$type} sending", $data);
+        }
+    }
+
+    protected function logError(string $type, string $reason, array $data = []): void
+    {
+        Journal::error("Notifier for {$type} failed: {$reason}", $data);
+    }
+
+    protected function logSent(string $type, array $data = []): void
+    {
+        if ($this->isDebug()) {
+            Journal::debug("Notifier for {$type} sent", $data);
+        }
+    }
+
+    private function isDebug(): bool
+    {
+        $dotenv = config('notifier.journal.debug');
+
+        if ($dotenv === 'true' || $dotenv === true) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function setClient(?string $client = null): string
+    {
+        if (! $client) {
+            $client = config('notifier.client', 'stream');
+        }
+
+        return $client;
+    }
+
+    /**
+     * Use default mailer from `.env` file.
+     */
+    private function autoMail(): array
+    {
+        $laravel_override = config('notifier.mail.laravel_override');
+        $mailer = $laravel_override ? config('mail.mailer') : config('notifier.mail.mailer');
+        $host = $laravel_override ? config('mail.host') : config('notifier.mail.host');
+        $port = $laravel_override ? config('mail.port') : config('notifier.mail.port');
+        $encryption = $laravel_override ? config('mail.encryption') : config('notifier.mail.encryption');
+        $username = $laravel_override ? config('mail.username') : config('notifier.mail.username');
+        $password = $laravel_override ? config('mail.password') : config('notifier.mail.password');
+        $from = $laravel_override
+            ? new Address(config('mail.from.address'), config('mail.from.name'))
+            : new Address(config('notifier.mail.from.address'), config('notifier.mail.from.name'));
+        $to = [new Address(config('notifier.mail.to.address'), config('notifier.mail.to.name'))];
+        $subject = config('notifier.mail.subject');
+
+        return [
+            'mailer' => $mailer,
+            'host' => $host,
+            'port' => $port,
+            'encryption' => $encryption,
+            'username' => $username,
+            'password' => $password,
+            'from' => $from,
+            'to' => $to,
+            'subject' => $subject,
+        ];
     }
 }

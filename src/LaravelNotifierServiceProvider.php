@@ -1,12 +1,12 @@
 <?php
 
-namespace Kiwilan\Notifier;
+namespace Kiwilan\LaravelNotifier;
 
-use Kiwilan\Notifier\Commands\NotifierCommand;
+use Kiwilan\LaravelNotifier\Commands\NotifierCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class NotifierServiceProvider extends PackageServiceProvider
+class LaravelNotifierServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
     {

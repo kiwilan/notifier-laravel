@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use Kiwilan\Notifier\Facades\Notifier;
+use Kiwilan\LaravelNotifier\Facades\Notifier;
 
 beforeEach(function () {
     Config::set('notifier.mail.mailer', dotenv()['NOTIFIER_MAIL_MAILER']);
@@ -26,8 +26,8 @@ it('can use', function () {
         ->port(config('notifier.mail.port'))
         ->credentials(config('notifier.mail.username'), config('notifier.mail.password'))
         ->encryption(config('notifier.mail.encryption'))
-        ->from(config('notifier.mail.from.address'), config('notifier.mail.from.name'))
-        ->to(config('notifier.mail.to.address'), config('notifier.mail.to.name'))
+        ->from('from@mail.com', config('notifier.mail.from.name'))
+        ->to('to@mail.com', config('notifier.mail.to.name'))
         ->send();
 
     expect($notifier->isSuccess())->toBeTrue();
