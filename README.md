@@ -14,22 +14,25 @@
 > [!WARNING]
 > Not ready for production for now.
 
-Notifier for Laravel is a package to add some useful classes to send notifications (with `Notifier::class`) and monitoring (with `Journal::class`). The configuration file is totally optional, if you have multiple webhooks, you can create your own configs to send notifications.
+Notifier for Laravel is a package to send notifications (with `Notifier`) and monitoring (with `Journal`), built for Discord, Slack and mails.
 
-Based on [`kiwilan/php-notifier`](https://github.com/kiwilan/php-notifier).
+Based on [`kiwilan/php-notifier`](https://github.com/kiwilan/php-notifier). Works for [Discord webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks), [Slack webhooks](https://api.slack.com/messaging/webhooks) and emails with [`symfony/mailer`](https://symfony.com/doc/current/mailer.html).
 
-Works for [Discord webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks), [Slack webhooks](https://api.slack.com/messaging/webhooks) and emails with [`symfony/mailer`](https://symfony.com/doc/current/mailer.html).
+> [!NOTE]
+> The configuration file is totally optional, if you have multiple webhooks, you can create your own configs to send notifications.
 
 ## About
 
-Laravel offers a built-in [Notification](https://laravel.com/docs/10.x/notifications) system, but this package is an alternative to it. Current package offer a simple way to send notifications without link to a user model and advanced way to monitoring (can be linked ton `filament/notifications` package (not included and not required).
+Laravel offers a built-in [Notification](https://laravel.com/docs/10.x/notifications) and [Laravel Logging](https://laravel.com/docs/10.x/logging) systems, this package is an alternative to these systems.
+
+`Notifier` allows to send notifications without link to a user model and advanced and `Journal` is based on `Log` facade. `Journal` can write logs send notifications and write logs in the database with `filament/notifications` package (not included and not required).
 
 When native Laravel notifications are for users, this package is designed for developers to help for debugging and monitoring, but you can use it for users too.
 
 This package offer a support for Discord and Slack webhooks, but Slack has only basic support (without legacy API support), for more, you can use [`laravel/slack-notification-channel`](https://github.com/laravel/slack-notification-channel). To avoid dependencies, this package doesn't use it.
 
 -   Discord: support message and rich embeds webhooks.
--   Slack: support message, attachments and blocks webhooks.
+-   Slack: support message, attachments webhooks.
 -   Mail: support message and attachments with `symfony/mailer`.
 
 ## Installation
