@@ -2,6 +2,10 @@
 
 All notable changes to `notifier-laravel` will be documented in this file.
 
+## v0.2.0 - 2024-02-11
+
+Import `kiwilan/php-notifier` to replace current `Notifier`
+
 ## v0.1.16 - 2024-02-05
 
 Hotfix for `Notifier` remove urlencode
