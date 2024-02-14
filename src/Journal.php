@@ -21,6 +21,9 @@ class Journal
         if (is_string($data)) {
             $this->data = [$data];
         }
+        if (empty($this->message)) {
+            $this->message = 'Empty message';
+        }
         $this->log();
     }
 
@@ -92,10 +95,12 @@ class Journal
         Log::log($this->level, $this->message, $this->data);
         if (config('notifier.journal.use_error_log')) {
             $data = json_encode($this->data, JSON_PRETTY_PRINT);
-            error_log("Journal: {$this->level} - {$this->message} - {$data}");
+            $message = "Journal: {$this->level} - {$this->message}";
+            if ($data) {
+                $message .= "\n{$data}";
+            }
+            error_log($message);
         }
-
-        // dump($this->message, $this->data);
     }
 
     /**
