@@ -185,6 +185,8 @@ Notifier is an alternative to [Laravel Notifications](https://laravel.com/docs/1
 > If `notifier.journal.debug` is `true`, `debug` level logs will be written for sending and sent notifications.
 > In all cases, `error` level logs will be written for sending errors.
 
+For HTTP client, you can configure `notifier.client` in the config file with `stream`, `curl` or `guzzle` and override it with second parameter for Discord, Slack and HTTP.
+
 #### Discord
 
 Default webhook URL, username and avatar URL can be set in the config file.
@@ -261,6 +263,24 @@ You can pass a custom webhook URL:
 use Kiwilan\Notifier\Facades\Notifier;
 
 $notifier = Notifier::slack('https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX');
+```
+
+#### HTTP
+
+You can use Notifier to send a request with `http` method. URL can be null if you set it in the config file with `notifier.http.url`.
+
+```php
+use Kiwilan\Notifier\Facades\Notifier;
+
+$notifier = Notifier::http('https://example.com')
+  ->method('POST')
+  ->headers([
+    'Content-Type' => 'application/json',
+  ])
+  ->body([
+    'hello' => 'world',
+  ])
+  ->send();
 ```
 
 #### Command
