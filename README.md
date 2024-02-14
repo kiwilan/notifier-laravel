@@ -11,9 +11,6 @@
 [![tests][tests-src]][tests-href]
 [![codecov][codecov-src]][codecov-href]
 
-> [!WARNING]
-> Not ready for production for now.
-
 Notifier for Laravel is a package to send notifications (with `Notifier`) and monitoring (with `Journal`), built for Discord, Slack and mails.
 
 Based on [`kiwilan/php-notifier`](https://github.com/kiwilan/php-notifier).
