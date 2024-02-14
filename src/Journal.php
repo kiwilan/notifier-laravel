@@ -21,10 +21,12 @@ class Journal
         if (is_string($data)) {
             $this->data = [$data];
         }
-        if (empty($this->message)) {
+        if (! empty($this->message)) {
+            $this->log();
+        } elseif (! empty($this->data)) {
             $this->message = 'Empty message';
+            $this->log();
         }
-        $this->log();
     }
 
     /**
