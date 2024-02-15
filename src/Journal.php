@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Kiwilan\LaravelNotifier\Facades\Notifier;
+use Kiwilan\Notifier\Utils\NotifierShared;
+use Symfony\Component\Mime\Address;
 
 class Journal
 {
@@ -155,16 +157,159 @@ class Journal
      */
     public function toNotifier(string $type): self
     {
-        $notifier = match ($type) {
-            'mail' => Notifier::mail(),
-            'slack' => Notifier::slack(),
-            'discord' => Notifier::discord(),
-            'http' => Notifier::http(),
-            default => null,
-        };
+        $file = $this->data['file'] ?? '';
+        $file = str_replace(base_path(), '', $file);
+        $file = str_replace('\\', '/', $file);
+        $line = $this->data['line'] ?? '';
+        $trace = NotifierShared::truncate($this->data['trace'] ?? '', 1000);
 
-        // $this->notifier->message([$this->message, json_encode($this->data, JSON_PRETTY_PRINT)])
-        //     ->send();
+        $username = config('notifier.discord.username') ?? '';
+
+        if ($type === 'discord') {
+            Notifier::discord(client: 'curl')
+                ->rich("Error '{$this->message}' on {$file}, line {$line}")
+                ->user($username)
+                ->author($username, config('app.url'), config('notifier.discord.avatar_url'))
+                ->title(config('app.name'))
+                ->colorError()
+                ->footer(config('app.url'), config('notifier.discord.avatar_url'))
+                ->url(config('app.url'))
+                ->fields([
+                    [
+                        'name' => 'Environment',
+                        'value' => config('app.env'),
+                    ],
+                    [
+                        'name' => 'Error',
+                        'value' => $this->message,
+                    ],
+                    [
+                        'name' => 'File',
+                        'value' => $file,
+                    ],
+                    [
+                        'name' => 'Line',
+                        'value' => $line,
+                    ],
+                    [
+                        'name' => 'Trace',
+                        'value' => $trace,
+                    ],
+                    [
+                        'name' => 'URL',
+                        'value' => request()->fullUrl(),
+                    ],
+                    [
+                        'name' => 'Method',
+                        'value' => request()->method(),
+                    ],
+                    [
+                        'name' => 'User Agent',
+                        'value' => request()->userAgent(),
+                    ],
+                    [
+                        'name' => 'IP',
+                        'value' => request()->ip(),
+                    ],
+                ])
+                ->timestamp()
+                ->send();
+
+            return $this;
+        }
+
+        if ($type === 'slack') {
+            Notifier::slack()
+                ->attachment("Error '{$this->message}' on {$file}, line {$line}")
+                ->fields([
+                    [
+                        'name' => 'Environment',
+                        'value' => config('app.env'),
+                        'short' => false,
+                    ],
+                    [
+                        'name' => 'Error',
+                        'value' => $this->message,
+                        'short' => false,
+                    ],
+                    [
+                        'name' => 'File',
+                        'value' => $file,
+                        'short' => false,
+                    ],
+                    [
+                        'name' => 'Line',
+                        'value' => $line,
+                        'short' => false,
+                    ],
+                    [
+                        'name' => 'Trace',
+                        'value' => $trace,
+                        'short' => false,
+                    ],
+                    [
+                        'name' => 'URL',
+                        'value' => request()->fullUrl(),
+                        'short' => false,
+                    ],
+                    [
+                        'name' => 'Method',
+                        'value' => request()->method(),
+                        'short' => false,
+                    ],
+                    [
+                        'name' => 'User Agent',
+                        'value' => request()->userAgent(),
+                        'short' => false,
+                    ],
+                    [
+                        'name' => 'IP',
+                        'value' => request()->ip(),
+                        'short' => false,
+                    ],
+                ])
+                ->send();
+
+            return $this;
+        }
+
+        if ($type === 'mail') {
+            $trace = json_encode($trace, JSON_PRETTY_PRINT);
+            $url = request()->fullUrl();
+            $method = request()->method();
+            $user_agent = request()->userAgent();
+            $ip = request()->ip();
+            Notifier::mail()
+                ->autoConfig([
+                    'mailer' => config('notifier.mail.mailer'),
+                    'host' => config('notifier.mail.host'),
+                    'port' => config('notifier.mail.port'),
+                    'encryption' => config('notifier.mail.encryption'),
+                    'username' => config('notifier.mail.username'),
+                    'password' => config('notifier.mail.password'),
+                    'to' => [new Address(config('notifier.mail.to_address'), config('notifier.mail.to_name'))],
+                    'from' => new Address(config('notifier.mail.from_address'), config('notifier.mail.from_name')),
+                    'subject' => config('notifier.mail.subject').' error',
+                ])
+                ->message("Error '{$this->message}' on {$file}, line {$line}\n\nURL: {$url}\nMethod: {$method}\nUser Agent: {$user_agent}\nIP: {$ip}\n\n{$trace}")
+                ->send();
+
+            return $this;
+        }
+
+        if ($type === 'http') {
+            Notifier::http(config('notifier.http.url'))
+                ->body([
+                    'message' => $this->message,
+                    'level' => $this->level,
+                    'data' => $this->data,
+                ])
+                ->send();
+
+            return $this;
+        }
+
+        Journal::warning("Journal: Notifier type '{$type}' is not found");
 
         return $this;
     }

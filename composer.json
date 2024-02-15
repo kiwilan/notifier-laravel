@@ -1,7 +1,7 @@
 {
     "name": "kiwilan/notifier-laravel",
     "description": "Notifier for Laravel is a package to send notifications and monitoring, built for Discord, Slack and mails.",
-    "version": "0.3.11",
+    "version": "0.3.12",
     "keywords": [
         "laravel",
         "notifier",
@@ -22,7 +22,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/contracts": "^10.0",
-        "kiwilan/php-notifier": "^0.0.32",
+        "kiwilan/php-notifier": "^0.0.36",
         "spatie/laravel-package-tools": "^1.14.0"
     },
     "require-dev": {
