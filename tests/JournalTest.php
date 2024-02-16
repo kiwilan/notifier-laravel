@@ -57,6 +57,8 @@ it('can send to notifier', function () {
 it('can use journal', function () {
     $journal = Journal::info('Hello, Journal!');
     $log = getLog();
+
+    expect($journal)->toBeInstanceOf(NotifierJournal::class);
 });
 
 it('can use handler', function () {
