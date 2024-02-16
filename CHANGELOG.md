@@ -2,6 +2,10 @@
 
 All notable changes to `notifier-laravel` will be documented in this file.
 
+## v0.3.13 - 2024-02-16
+
+`Journal` improve `handler()`
+
 ## v0.3.12 - 2024-02-15
 
 Hotfix
