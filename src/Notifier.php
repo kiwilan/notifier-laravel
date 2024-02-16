@@ -100,6 +100,17 @@ class Notifier
             });
     }
 
+    public function isDebug(): bool
+    {
+        $dotenv = config('notifier.journal.debug');
+
+        if ($dotenv === 'true' || $dotenv === true) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function logSending(string $type, array $data = []): void
     {
         if ($this->isDebug()) {
@@ -117,17 +128,6 @@ class Notifier
         if ($this->isDebug()) {
             Journal::debug("Notifier for {$type} sent", $data);
         }
-    }
-
-    private function isDebug(): bool
-    {
-        $dotenv = config('notifier.journal.debug');
-
-        if ($dotenv === 'true' || $dotenv === true) {
-            return true;
-        }
-
-        return false;
     }
 
     private function setClient(?string $client = null): string

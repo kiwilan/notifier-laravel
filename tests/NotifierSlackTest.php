@@ -17,18 +17,36 @@ it('can use', function () {
     $notifier = Notifier::slack()
         ->message([
             'Hello',
-            'Slack!',
+            'array!',
         ])
         ->send();
     expect($notifier->isSuccess())->toBeTrue();
 
     $notifier = Notifier::slack()
-        ->attachment('*Hello, Slack!*')
+        ->attachment('*Hello, attachment!*')
+        ->colorSuccess()
+        ->author('Author', 'https://github.com', 'https://raw.githubusercontent.com/kiwilan/notifier-laravel/main/docs/banner.jpg')
+        ->imageUrl('https://raw.githubusercontent.com/kiwilan/notifier-laravel/main/docs/banner.jpg')
+        ->title('Title', 'https://github.com')
+        ->fields([
+            [
+                'name' => 'Field 1',
+                'value' => 'Value 1',
+                'short' => true,
+            ],
+            [
+                'name' => 'Field 2',
+                'value' => 'Value 2',
+                'short' => true,
+            ],
+        ])
+        ->timestamp(now())
+        ->footer('Footer', 'https://raw.githubusercontent.com/kiwilan/notifier-laravel/main/docs/banner.jpg')
         ->send();
     expect($notifier->isSuccess())->toBeTrue();
 
     $notifier = Notifier::slack()
-        ->blocks('*Hello, Slack!*')
+        ->blocks('*Hello, blocks!*')
         ->send();
     expect($notifier->isSuccess())->toBeTrue();
 });

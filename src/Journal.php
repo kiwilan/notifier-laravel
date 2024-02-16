@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Kiwilan\LaravelNotifier\Facades\Notifier;
 use Kiwilan\Notifier\Utils\NotifierShared;
-use Symfony\Component\Mime\Address;
 
 class Journal
 {
@@ -71,27 +70,33 @@ class Journal
      * @param  bool  $toDatabase  Send notification to database with `filament/notifications` package.
      * @param  string|null  $toNotifier  Send notification to email, Slack or Discord, use `mail`, `slack` or `discord`.
      */
-    public function handler(\Throwable $e, bool $toDatabase = false, ?string $toNotifier = null): ?self
+    public function handler(\Throwable $e, bool $toDatabase = true, ?string $toNotifier = null): ?self
     {
         if (config('app.env') === 'local') {
             return null;
         }
 
-        $self = new self($e->getMessage(), 'error', [
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => $e->getTraceAsString(),
-        ]);
+        try {
+            $self = new self($e->getMessage(), 'error', [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
 
-        if ($toDatabase) {
-            $self->toDatabase();
+            if ($toDatabase) {
+                $self->toDatabase();
+            }
+
+            if ($toNotifier) {
+                $self->toNotifier($toNotifier);
+            }
+
+            return $self;
+        } catch (\Throwable $th) {
+            error_log("Journal: handler error {$th->getMessage()}");
+
+            return null;
         }
-
-        if ($toNotifier) {
-            $self->toNotifier($toNotifier);
-        }
-
-        return $self;
     }
 
     private function log(): void
@@ -160,8 +165,12 @@ class Journal
         $file = $this->data['file'] ?? '';
         $file = str_replace(base_path(), '', $file);
         $file = str_replace('\\', '/', $file);
+
         $line = $this->data['line'] ?? '';
-        $trace = NotifierShared::truncate($this->data['trace'] ?? '', 1000);
+
+        $trace = $this->data['trace'] ?? '';
+        $trace = str_replace('#', "\n#", $trace);
+        $traceLimit = NotifierShared::truncate($trace, 1000);
 
         $username = config('notifier.discord.username') ?? '';
 
@@ -193,7 +202,7 @@ class Journal
                     ],
                     [
                         'name' => 'Trace',
-                        'value' => $trace,
+                        'value' => $traceLimit,
                     ],
                     [
                         'name' => 'URL',
@@ -221,6 +230,10 @@ class Journal
         if ($type === 'slack') {
             Notifier::slack()
                 ->attachment("Error '{$this->message}' on {$file}, line {$line}")
+                ->author($username, config('app.url'), config('notifier.discord.avatar_url'))
+                ->title(config('app.name'))
+                ->colorError()
+                ->footer(config('app.url'), config('notifier.discord.avatar_url'))
                 ->fields([
                     [
                         'name' => 'Environment',
@@ -244,7 +257,7 @@ class Journal
                     ],
                     [
                         'name' => 'Trace',
-                        'value' => $trace,
+                        'value' => $traceLimit,
                         'short' => false,
                     ],
                     [
@@ -274,22 +287,36 @@ class Journal
         }
 
         if ($type === 'mail') {
-            $trace = json_encode($trace, JSON_PRETTY_PRINT);
             $url = request()->fullUrl();
             $method = request()->method();
             $user_agent = request()->userAgent();
             $ip = request()->ip();
+
             Notifier::mail()
-                ->autoConfig([
-                    'mailer' => config('notifier.mail.mailer'),
-                    'host' => config('notifier.mail.host'),
-                    'port' => config('notifier.mail.port'),
-                    'encryption' => config('notifier.mail.encryption'),
-                    'username' => config('notifier.mail.username'),
-                    'password' => config('notifier.mail.password'),
-                    'to' => [new Address(config('notifier.mail.to_address'), config('notifier.mail.to_name'))],
-                    'from' => new Address(config('notifier.mail.from_address'), config('notifier.mail.from_name')),
-                    'subject' => config('notifier.mail.subject').' error',
+                ->html([
+                    '<html>',
+                    '<head>',
+                    '<style>',
+                    'body {',
+                    'font-family: Arial, sans-serif;',
+                    '}',
+                    'h1 {',
+                    'color: #ef4444;',
+                    '}',
+                    'pre {',
+                    'white-space: pre-wrap;',
+                    '}',
+                    '</style>',
+                    '</head>',
+                    '<body>',
+                    "<h1>Error '{$this->message}' on {$file}, line {$line}</h1>",
+                    "<p>URL: {$url}</p>",
+                    "<p>Method: {$method}</p>",
+                    "<p>User Agent: {$user_agent}</p>",
+                    "<p>IP: {$ip}</p>",
+                    "<pre>{$trace}</pre>",
+                    '</body>',
+                    '</html>',
                 ])
                 ->message("Error '{$this->message}' on {$file}, line {$line}\n\nURL: {$url}\nMethod: {$method}\nUser Agent: {$user_agent}\nIP: {$ip}\n\n{$trace}")
                 ->send();
