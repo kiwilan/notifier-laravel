@@ -47,7 +47,7 @@ return [
         // Default user model for notification.
         'model' => env('NOTIFIER_TO_DATABASE_MODEL', 'App\Models\User'),
         // Recipients ID for notification.
-        'recipients_id' => explode(',', env('NOTIFIER_TO_DATABASE_RECIPIENTS_ID', ''), 0),
+        'recipients_id' => explode(',', env('NOTIFIER_TO_DATABASE_RECIPIENTS_ID', '')),
     ],
 
     'journal' => [

@@ -132,22 +132,34 @@ class Journal
             return $this;
         }
 
+        $recipients_id = config('notifier.to_database.recipients_id');
+        if (count(($recipients_id)) === 0 || count($recipients_id) === 1 && $recipients_id[0] === '') {
+            $users = null;
+        } else {
+            $users = $model_class::whereIn('id', $recipients_id)->get();
+        }
+
+        if (! $users) {
+            Log::warning('Journal: you need to set recipients for notification, check https://filamentphp.com/docs/3.x/notifications/database-notifications');
+
+            return $this;
+        }
+
         try {
-            $filamentUsers = $users;
-
-            $recipients_id = config('notifier.to_database.recipients_id');
-            if (! $filamentUsers) {
-                $filamentUsers = $model_class::query()->get();
-
-                if ($recipients_id) {
-                    $filamentUsers = $filamentUsers->filter(fn ($user) => in_array($user->id, $recipients_id));
-                }
-            }
-
-            \Filament\Notifications\Notification::make()
+            $notification = \Filament\Notifications\Notification::make()
                 ->title(ucfirst($this->level))
-                ->body($this->message)
-                ->sendToDatabase($filamentUsers);
+                ->body($this->message);
+
+            $color = match ($this->level) {
+                'info' => 'info',
+                'debug' => 'info',
+                'warning' => 'warning',
+                'error' => 'danger',
+                default => 'info',
+            };
+
+            $notification->{$color}()
+                ->sendToDatabase($users);
         } catch (\Throwable $th) {
             Log::error("Journal: {$th->getMessage()}");
         }
