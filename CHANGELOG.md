@@ -2,6 +2,14 @@
 
 All notable changes to `notifier-laravel` will be documented in this file.
 
+## v0.3.14 - 2024-02-24
+
+`Journal` with `toDatabase()` fixes
+
+- `notifier.to_database.recipients_id` have to be filled to send automatic notifications to the database.
+- add icon with level of severity to the notification.
+- set manual recipients is possible.
+
 ## v0.3.13 - 2024-02-16
 
 `Journal` improve `handler()`
