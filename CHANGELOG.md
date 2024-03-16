@@ -2,6 +2,10 @@
 
 All notable changes to `notifier-laravel` will be documented in this file.
 
+## v0.3.15 - 2024-03-16
+
+Add support for Laravel 11
+
 ## v0.3.14 - 2024-02-24
 
 `Journal` with `toDatabase()` fixes
