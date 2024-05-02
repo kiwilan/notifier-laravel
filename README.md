@@ -337,5 +337,5 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [tests-href]: https://github.com/kiwilan/notifier-laravel/actions/workflows/run-tests.yml
 [codecov-src]: https://codecov.io/gh/kiwilan/notifier-laravel/branch/main/graph/badge.svg?token=1py1fk6vwc
 [codecov-href]: https://codecov.io/gh/kiwilan/notifier-laravel
-[laravel-src]: https://img.shields.io/static/v1?label=Laravel&message=v10&style=flat-square&colorA=18181B&colorB=FF2D20
+[laravel-src]: https://img.shields.io/static/v1?label=Laravel&message=v10-11&style=flat-square&colorA=18181B&colorB=FF2D20
 [laravel-href]: https://laravel.com
