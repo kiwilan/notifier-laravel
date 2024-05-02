@@ -2,6 +2,10 @@
 
 All notable changes to `notifier-laravel` will be documented in this file.
 
+## v0.3.17 - 2024-05-02
+
+Update `kiwilan/php-notifier`
+
 ## v0.3.16 - 2024-03-16
 
 Update dependencies
