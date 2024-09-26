@@ -22,7 +22,7 @@ beforeEach(function () {
 
 it('can use instance', function () {
     $facade = Journal::info('Hello, Journal!');
-    $instance = (new NotifierJournal())->info('Hello, Journal!');
+    $instance = (new NotifierJournal)->info('Hello, Journal!');
 
     expect($facade)->toEqual($instance);
     expect($facade)->toBeInstanceOf(NotifierJournal::class);
