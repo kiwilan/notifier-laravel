@@ -39,10 +39,14 @@ class Notifier
      *
      * @see https://api.slack.com/messaging/webhooks
      */
-    public function slack(?string $webhook = null, ?string $client = null): NotifierSlack
+    public function slack(?string $webhook = null, ?string $client = null): ?NotifierSlack
     {
         if (! $webhook) {
             $webhook = config('notifier.slack.webhook');
+        }
+
+        if (! $webhook) {
+            return null;
         }
 
         return NotifierSlack::make($webhook, $this->setClient($client))
@@ -61,10 +65,14 @@ class Notifier
      *
      * @see https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
      */
-    public function discord(?string $webhook = null, ?string $client = null): NotifierDiscord
+    public function discord(?string $webhook = null, ?string $client = null): ?NotifierDiscord
     {
         if (! $webhook) {
             $webhook = config('notifier.discord.webhook');
+        }
+
+        if (! $webhook) {
+            return null;
         }
 
         return NotifierDiscord::make($webhook, $this->setClient($client))
@@ -81,14 +89,14 @@ class Notifier
      *
      * @param  string  $url  HTTP endpoint URL
      */
-    public function http(?string $url = null, ?string $client = null): NotifierHttp
+    public function http(?string $url = null, ?string $client = null): ?NotifierHttp
     {
         if (! $url) {
             $url = config('notifier.http.url');
         }
 
         if (! $url) {
-            throw new \Exception('Notifier: HTTP URL is not set');
+            return null;
         }
 
         return NotifierHttp::make($url, $this->setClient($client))

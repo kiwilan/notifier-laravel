@@ -93,8 +93,6 @@ class Journal
 
             return $self;
         } catch (\Throwable $th) {
-            error_log("Journal: handler error {$th->getMessage()}");
-
             return null;
         }
     }
@@ -187,8 +185,14 @@ class Journal
         $username = config('notifier.discord.username') ?? '';
 
         if ($type === 'discord') {
-            Notifier::discord(client: 'curl')
-                ->rich("Error '{$this->message}' on {$file}, line {$line}")
+            $client = Notifier::discord(client: 'curl');
+            if (! $client) {
+                error_log('Notifier for Laravel: Notifier Discord webhook not found');
+
+                return $this;
+            }
+
+            $client->rich("Error '{$this->message}' on {$file}, line {$line}")
                 ->user($username)
                 ->author($username, config('app.url'), config('notifier.discord.avatar_url'))
                 ->title(config('app.name'))
@@ -240,8 +244,14 @@ class Journal
         }
 
         if ($type === 'slack') {
-            Notifier::slack()
-                ->attachment("Error '{$this->message}' on {$file}, line {$line}")
+            $client = Notifier::slack();
+            if (! $client) {
+                error_log('Notifier for Laravel: Notifier Slack webhook not found');
+
+                return $this;
+            }
+
+            $client->attachment("Error '{$this->message}' on {$file}, line {$line}")
                 ->author($username, config('app.url'), config('notifier.discord.avatar_url'))
                 ->title(config('app.name'))
                 ->colorError()

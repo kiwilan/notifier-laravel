@@ -68,4 +68,9 @@ it('can use handler', function () {
     $mail = Journal::handler($exception, toDatabase: true, toNotifier: 'mail');
 
     expect($discord)->toBeInstanceOf(NotifierJournal::class);
+
+    Config::set('notifier.discord.webhook', '');
+    $discord = Journal::handler($exception, toDatabase: true, toNotifier: 'discord');
+    dump($discord);
+    expect($discord)->toBeInstanceOf(NotifierJournal::class);
 });
