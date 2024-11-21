@@ -2,6 +2,10 @@
 
 All notable changes to `notifier-laravel` will be documented in this file.
 
+## v0.3.18 - 2024-09-26
+
+Fix notifier handler with null webhook
+
 ## v0.3.17 - 2024-05-02
 
 Update `kiwilan/php-notifier`
